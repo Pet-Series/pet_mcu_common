@@ -4,13 +4,13 @@
   <version>0.0.0</version>
   <description>The pet_mcu_base package</description>
 
-  <maintainer>Viktor Kull</maintainer>
+  <maintainer email="karl.viktor.kull@gmail.com">Viktor Kull</maintainer>
 
   <license>MIT</license>
 
   <url type="website">https://github.com/kullken/pet_mcu_base.git</url>
 
-  <author>Viktor Kull</author>
+  <author email="karl.viktor.kull@gmail.com">Viktor Kull</author>
 
   <!-- The *depend tags are used to specify dependencies -->
   <!-- Dependencies can be catkin packages or system dependencies -->
