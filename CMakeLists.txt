@@ -13,20 +13,8 @@ set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 
 set(EXECUTABLE_OUTPUT_PATH ${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_LIB_DESTINATION}/${PROJECT_NAME})
 
-rosserial_generate_ros_lib(
-  PACKAGE rosserial_arduino
-  SCRIPT make_libraries.py
-)
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/setup_ros_lib.cmake)
 
-add_library(pet_ros_lib INTERFACE)
-add_library(pet::ros_lib ALIAS pet_ros_lib)
-target_include_directories(pet_ros_lib
-  INTERFACE
-    ${${PROJECT_NAME}_ROS_LIB_DIR}
-)
-add_dependencies(pet_ros_lib
-  ${PROJECT_NAME}_ros_lib
-)
 
 add_subdirectory(core)
 
