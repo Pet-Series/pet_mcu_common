@@ -36,8 +36,21 @@ add_subdirectory(modules/line_sensor_module)
 
 add_subdirectory(pet_mk_iv_uno)
 
-catkin_package(
-  # LIBRARIES pet::mcu_core pet::ultrasound_module
+install(TARGETS mcu_core pet_ros_lib engine_module line_sensor_module ultrasound_module new_ping
+  EXPORT ${PROJECT_NAME}-export
+  ARCHIVE DESTINATION lib/${PROJECT_NAME}
+  LIBRARY DESTINATION lib/${PROJECT_NAME}
+  RUNTIME DESTINATION bin
+)
+
+install(EXPORT ${PROJECT_NAME}-export
+  FILE ${PROJECT_NAME}Targets.cmake
+  NAMESPACE pet::
+  DESTINATION share/${PROJECT_NAME}/cmake
+)
+
+install(FILES "cmake/pet_mcu_baseConfig.cmake"
+  DESTINATION share/${PROJECT_NAME}/cmake
 )
 
 # rosserial_configure_client(
