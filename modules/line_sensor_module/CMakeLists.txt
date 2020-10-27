@@ -7,10 +7,12 @@ add_library(pet::line_sensor_module ALIAS line_sensor_module)
 target_sources(line_sensor_module
   INTERFACE
     $<INSTALL_INTERFACE:share/pet_mcu_base/src/line_sensor_module.cpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/line_sensor_module.cpp>
 )
 target_include_directories(line_sensor_module
   INTERFACE
     $<INSTALL_INTERFACE:include/pet_mcu_base>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 target_link_libraries(line_sensor_module
   INTERFACE

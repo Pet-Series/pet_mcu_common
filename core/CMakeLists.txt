@@ -11,10 +11,16 @@ target_sources(mcu_core
     $<INSTALL_INTERFACE:share/pet_mcu_base/src/timer.cpp>
     $<INSTALL_INTERFACE:share/pet_mcu_base/src/arduino_module.cpp>
     $<INSTALL_INTERFACE:share/pet_mcu_base/src/prgmem_string.cpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/rosserial_node.cpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/timer.cpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/arduino_module.cpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/prgmem_string.cpp>
 )
 target_include_directories(mcu_core
   INTERFACE
     $<INSTALL_INTERFACE:include/pet_mcu_base>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 target_link_libraries(mcu_core
   INTERFACE

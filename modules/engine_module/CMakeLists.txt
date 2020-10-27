@@ -7,10 +7,12 @@ add_library(pet::engine_module ALIAS engine_module)
 target_sources(engine_module
   INTERFACE
     $<INSTALL_INTERFACE:share/pet_mcu_base/src/engine_module.cpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/engine_module.cpp>
 )
 target_include_directories(engine_module
   INTERFACE
     $<INSTALL_INTERFACE:include/pet_mcu_base>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 target_link_libraries(engine_module
   INTERFACE

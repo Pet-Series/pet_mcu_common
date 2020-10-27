@@ -8,10 +8,13 @@ target_sources(ultrasound_module
   INTERFACE
     $<INSTALL_INTERFACE:share/pet_mcu_base/src/ultrasound_module.cpp>
     $<INSTALL_INTERFACE:share/pet_mcu_base/src/ultrasound.cpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/ultrasound_module.cpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/ultrasound.cpp>
 )
 target_include_directories(ultrasound_module
   INTERFACE
     $<INSTALL_INTERFACE:include/pet_mcu_base>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 target_link_libraries(ultrasound_module
   INTERFACE
