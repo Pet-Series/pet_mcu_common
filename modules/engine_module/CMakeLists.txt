@@ -10,7 +10,7 @@ target_sources(engine_module
 )
 target_include_directories(engine_module
   INTERFACE
-    $<INSTALL_INTERFACE:include>
+    $<INSTALL_INTERFACE:include/pet_mcu_base>
 )
 target_link_libraries(engine_module
   INTERFACE

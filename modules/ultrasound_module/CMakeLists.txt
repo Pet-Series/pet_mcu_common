@@ -11,7 +11,7 @@ target_sources(ultrasound_module
 )
 target_include_directories(ultrasound_module
   INTERFACE
-    $<INSTALL_INTERFACE:include>
+    $<INSTALL_INTERFACE:include/pet_mcu_base>
 )
 target_link_libraries(ultrasound_module
   INTERFACE

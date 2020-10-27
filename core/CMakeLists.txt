@@ -14,7 +14,7 @@ target_sources(mcu_core
 )
 target_include_directories(mcu_core
   INTERFACE
-    $<INSTALL_INTERFACE:include>
+    $<INSTALL_INTERFACE:include/pet_mcu_base>
 )
 target_link_libraries(mcu_core
   INTERFACE
