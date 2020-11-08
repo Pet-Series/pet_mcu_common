@@ -21,11 +21,12 @@ add_subdirectory(core)
 add_subdirectory(modules/ultrasound_module)
 add_subdirectory(modules/engine_module)
 add_subdirectory(modules/ir_remote_module)
+add_subdirectory(modules/light_beacon_module)
 add_subdirectory(modules/line_sensor_module)
 
 add_subdirectory(pet_mk_iv_uno)
 
-install(TARGETS mcu_core pet_ros_lib engine_module ir_remote_module irremote line_sensor_module ultrasound_module new_ping
+install(TARGETS mcu_core pet_ros_lib engine_module ir_remote_module irremote light_beacon_module servo line_sensor_module ultrasound_module new_ping
   EXPORT ${PROJECT_NAME}-export
   ARCHIVE DESTINATION lib/${PROJECT_NAME}
   LIBRARY DESTINATION lib/${PROJECT_NAME}
