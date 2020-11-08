@@ -15,16 +15,13 @@ set(EXECUTABLE_OUTPUT_PATH ${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_LIB_DESTINATI
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/setup_ros_lib.cmake)
 
-
 add_subdirectory(core)
 
-add_subdirectory(modules/ultrasound_module)
 add_subdirectory(modules/engine_module)
 add_subdirectory(modules/ir_remote_module)
 add_subdirectory(modules/light_beacon_module)
 add_subdirectory(modules/line_sensor_module)
-
-add_subdirectory(pet_mk_iv_uno)
+add_subdirectory(modules/ultrasound_module)
 
 install(TARGETS mcu_core pet_ros_lib engine_module ir_remote_module irremote light_beacon_module servo line_sensor_module ultrasound_module new_ping
   EXPORT ${PROJECT_NAME}-export
@@ -42,21 +39,3 @@ install(EXPORT ${PROJECT_NAME}-export
 install(FILES "cmake/pet_mcu_baseConfig.cmake"
   DESTINATION share/${PROJECT_NAME}/cmake
 )
-
-# rosserial_configure_client(
-#   DIRECTORY pet_mk_iv_uno
-#   TOOLCHAIN_FILE ${ROSSERIAL_ARDUINO_TOOLCHAIN}
-# )
-
-# rosserial_add_client_target(pet_mk_iv_uno pet_mk_iv_uno ALL)
-
-# rosserial_configure_client(
-#   DIRECTORY firmware
-#   TOOLCHAIN_FILE ${ROSSERIAL_ARDUINO_TOOLCHAIN}
-# )
-
-# rosserial_add_client_target(firmware arduino_uno ALL)
-# rosserial_add_client_target(firmware arduino_uno-upload)
-
-# rosserial_add_client_target(firmware arduino_nano ALL)
-# rosserial_add_client_target(firmware arduino_nano-upload)
