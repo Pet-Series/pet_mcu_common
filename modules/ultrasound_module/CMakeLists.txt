@@ -26,20 +26,16 @@ target_link_libraries(ultrasound_module
 set(ARDUINO_LIBRARIES_PATH $ENV{HOME}/Arduino/libraries)
 
 # NewPing Arduino library
-set(NEW_PING_SOURCE_DIR ${ARDUINO_LIBRARIES_PATH}/NewPing/src)
-set(NEW_PING_INCLUDE_DIRS ${NEW_PING_SOURCE_DIR})
-set(NEW_PING_SOURCE_FILES
-  ${NEW_PING_SOURCE_DIR}/NewPing.cpp
-)
+set(NEW_PING_LIB_PATH ${ARDUINO_LIBRARIES_PATH}/NewPing/src)
 
 add_library(new_ping INTERFACE)
-target_sources(new_ping
-  INTERFACE
-    ${NEW_PING_SOURCE_DIR}/NewPing.cpp
-)
 target_include_directories(new_ping
   INTERFACE
-    ${NEW_PING_INCLUDE_DIRS}
+    ${NEW_PING_LIB_PATH}
+)
+target_sources(new_ping
+  INTERFACE
+    ${NEW_PING_LIB_PATH}/NewPing.cpp
 )
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/
