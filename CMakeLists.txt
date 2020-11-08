@@ -8,11 +8,6 @@ find_package(catkin REQUIRED COMPONENTS
   pet_mk_iv_msgs
 )
 
-set(BUILD_SHARED_LIBS FALSE)
-set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
-
-set(EXECUTABLE_OUTPUT_PATH ${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_LIB_DESTINATION}/${PROJECT_NAME})
-
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/setup_ros_lib.cmake)
 
 add_subdirectory(core)
