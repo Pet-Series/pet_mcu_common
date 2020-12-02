@@ -13,14 +13,14 @@ add_dependencies(${PROJECT_NAME}_ros_lib
   std_msgs_generate_messages_py
 )
 
-add_library(pet_ros_lib INTERFACE)
-add_library(pet::ros_lib ALIAS pet_ros_lib)
-target_include_directories(pet_ros_lib
+add_library(ros_lib INTERFACE)
+add_library(pet::ros_lib ALIAS ros_lib)
+target_include_directories(ros_lib
   INTERFACE
     $<INSTALL_INTERFACE:include/pet_mcu_base/ros_lib>
     $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/ros_lib>
 )
-add_dependencies(pet_ros_lib
+add_dependencies(ros_lib
   ${PROJECT_NAME}_ros_lib
 )
 
