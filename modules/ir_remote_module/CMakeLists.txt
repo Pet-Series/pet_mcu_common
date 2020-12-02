@@ -34,9 +34,8 @@ target_sources(irremote
   INTERFACE
     ${IRREMOTE_LIB_PATH}/IRremote.cpp
     ${IRREMOTE_LIB_PATH}/irPronto.cpp
-    ${IRREMOTE_LIB_PATH}/irRecv.cpp
+    ${IRREMOTE_LIB_PATH}/irReceive.cpp
     ${IRREMOTE_LIB_PATH}/irSend.cpp
-    ${IRREMOTE_LIB_PATH}/ir_Aiwa.cpp
     ${IRREMOTE_LIB_PATH}/ir_BoseWave.cpp
     ${IRREMOTE_LIB_PATH}/ir_Denon.cpp
     ${IRREMOTE_LIB_PATH}/ir_Dish.cpp
@@ -44,7 +43,6 @@ target_sources(irremote
     ${IRREMOTE_LIB_PATH}/ir_LG.cpp
     ${IRREMOTE_LIB_PATH}/ir_Lego_PF.cpp
     ${IRREMOTE_LIB_PATH}/ir_MagiQuest.cpp
-    ${IRREMOTE_LIB_PATH}/ir_Mitsubishi.cpp
     ${IRREMOTE_LIB_PATH}/ir_NEC.cpp
     ${IRREMOTE_LIB_PATH}/ir_Panasonic.cpp
     ${IRREMOTE_LIB_PATH}/ir_RC5_RC6.cpp
