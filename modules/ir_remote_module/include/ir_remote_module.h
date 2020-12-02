@@ -34,7 +34,6 @@ private:
     ros::Publisher m_publisher;
     
     IRrecv m_irrecv{kRecvPin}; // IRrecv från <IRremote.h>
-    decode_results m_decode_results;
 };
 
 } // namespace pet

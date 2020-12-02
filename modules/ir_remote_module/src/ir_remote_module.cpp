@@ -24,12 +24,12 @@ IrRemoteModule::IrRemoteModule()
 
 ros::Time IrRemoteModule::callback(const TimerEvent& event)
 {
-    if (m_irrecv.decode(&m_decode_results))
+    if (m_irrecv.decode())
     {
         nh.loginfo("IR remote signal received - Tjoho!");     // TODO: Te be removed
-        nh.loginfo(String(m_decode_results.value).c_str());   // TODO: Te be removed
+        nh.loginfo(String(m_irrecv.results.value).c_str());   // TODO: Te be removed
 
-        switch (m_decode_results.value)
+        switch (m_irrecv.results.value)
         {
             case IR_RC6_OnOff_t1:
             case IR_RC6_OnOff_t2:
