@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.2)
 
-project(pet_line_sensor_module)
+project(pet_mcu_line_sensor_module)
 
 add_library(line_sensor_module INTERFACE)
 add_library(pet::line_sensor_module ALIAS line_sensor_module)
@@ -26,4 +26,17 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
   DESTINATION include/pet_mcu_base
+)
+
+install(TARGETS line_sensor_module
+  EXPORT ${PROJECT_NAME}-export
+  ARCHIVE DESTINATION lib/${PROJECT_NAME}
+  LIBRARY DESTINATION lib/${PROJECT_NAME}
+  RUNTIME DESTINATION bin
+)
+
+install(EXPORT ${PROJECT_NAME}-export
+  FILE ${PROJECT_NAME}Targets.cmake
+  NAMESPACE pet::
+  DESTINATION share/pet_mcu_base/cmake
 )

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.2)
 
-project(pet_light_beacon_module)
+project(pet_mcu_light_beacon_module)
 
 add_library(light_beacon_module INTERFACE)
 add_library(pet::light_beacon_module ALIAS light_beacon_module)
@@ -42,4 +42,17 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
   DESTINATION include/pet_mcu_base
+)
+
+install(TARGETS light_beacon_module servo
+  EXPORT ${PROJECT_NAME}-export
+  ARCHIVE DESTINATION lib/${PROJECT_NAME}
+  LIBRARY DESTINATION lib/${PROJECT_NAME}
+  RUNTIME DESTINATION bin
+)
+
+install(EXPORT ${PROJECT_NAME}-export
+  FILE ${PROJECT_NAME}Targets.cmake
+  NAMESPACE pet::
+  DESTINATION share/pet_mcu_base/cmake
 )

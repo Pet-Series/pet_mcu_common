@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.2)
 
-project(pet_ultrasound_module)
+project(pet_mcu_ultrasound_module)
 
 add_library(ultrasound_module INTERFACE)
 add_library(pet::ultrasound_module ALIAS ultrasound_module)
@@ -44,4 +44,17 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
   DESTINATION include/pet_mcu_base
+)
+
+install(TARGETS ultrasound_module new_ping
+  EXPORT ${PROJECT_NAME}-export
+  ARCHIVE DESTINATION lib/${PROJECT_NAME}
+  LIBRARY DESTINATION lib/${PROJECT_NAME}
+  RUNTIME DESTINATION bin
+)
+
+install(EXPORT ${PROJECT_NAME}-export
+  FILE ${PROJECT_NAME}Targets.cmake
+  NAMESPACE pet::
+  DESTINATION share/pet_mcu_base/cmake
 )

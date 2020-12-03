@@ -18,19 +18,6 @@ add_subdirectory(modules/light_beacon_module)
 add_subdirectory(modules/line_sensor_module)
 add_subdirectory(modules/ultrasound_module)
 
-install(TARGETS mcu_core ros_lib engine_module ir_remote_module irremote light_beacon_module servo line_sensor_module ultrasound_module new_ping
-  EXPORT ${PROJECT_NAME}-export
-  ARCHIVE DESTINATION lib/${PROJECT_NAME}
-  LIBRARY DESTINATION lib/${PROJECT_NAME}
-  RUNTIME DESTINATION bin
-)
-
-install(EXPORT ${PROJECT_NAME}-export
-  FILE ${PROJECT_NAME}Targets.cmake
-  NAMESPACE pet::
-  DESTINATION share/${PROJECT_NAME}/cmake
-)
-
 install(FILES "cmake/pet_mcu_baseConfig.cmake"
   DESTINATION share/${PROJECT_NAME}/cmake
 )
