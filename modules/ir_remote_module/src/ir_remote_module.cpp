@@ -13,23 +13,26 @@ namespace pet
 
 using pet_mk_iv_msgs::IrRemote;
 
-IrRemoteModule::IrRemoteModule()
+const ros::Duration IrRemoteModule::kPeriod = ros::Duration{1.0/kFrequency};
+
+IrRemoteModule::IrRemoteModule(int receiver_pin)
     : m_msg()
     , m_publisher(kTopicName, &m_msg)
+    , m_irreceiver(receiver_pin)
 {
     nh.advertise(m_publisher);
-    m_irrecv.enableIRIn();      // Enable the IR Receiver (see kRecvPin value for IR-receiver pin)
+    m_irreceiver.enableIRIn();      // Enable the IR Receiver (see kRecvPin value for IR-receiver pin)
     m_msg.key = IrRemote::NOTSET;
 }
 
 ros::Time IrRemoteModule::callback(const TimerEvent& event)
 {
-    if (m_irrecv.decode())
+    if (m_irreceiver.decode())
     {
         nh.loginfo("IR remote signal received - Tjoho!");     // TODO: Te be removed
-        nh.loginfo(String(m_irrecv.results.value).c_str());   // TODO: Te be removed
+        nh.loginfo(String(m_irreceiver.results.value).c_str());   // TODO: Te be removed
 
-        switch (m_irrecv.results.value)
+        switch (m_irreceiver.results.value)
         {
             case IR_RC6_OnOff_t1:
             case IR_RC6_OnOff_t2:
@@ -173,7 +176,7 @@ ros::Time IrRemoteModule::callback(const TimerEvent& event)
         {
             m_publisher.publish(&m_msg);
         }
-        m_irrecv.resume();
+        m_irreceiver.resume();
     }
 
     return event.desired_time + kPeriod;  // Calculate next time this module wants to be called again

@@ -14,18 +14,16 @@
 namespace pet
 {
 
-// Handler class for three ground pointing light sensors arranged in a left-middle-right pattern.
 class IrRemoteModule : public ArduinoModule
 {
 private:
     static constexpr double kFrequency = 10;   // Hz
-    static constexpr auto   kPeriod = ros::Duration{1.0/kFrequency};
+    static const ros::Duration kPeriod;
 
-    static constexpr int    kRecvPin   = 11; // IR-receiver Arduino Nano pin
     static constexpr auto   kTopicName = "ir_remote";
 
 public:
-    IrRemoteModule();
+    IrRemoteModule(int receiver_pin);
 
     ros::Time callback(const TimerEvent& event) override;
 
@@ -33,7 +31,7 @@ private:
     pet_mk_iv_msgs::IrRemote m_msg;
     ros::Publisher m_publisher;
     
-    IRrecv m_irrecv{kRecvPin}; // IRrecv från <IRremote.h>
+    IRrecv m_irreceiver;
 };
 
 } // namespace pet
