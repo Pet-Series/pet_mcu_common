@@ -8,19 +8,23 @@
 namespace pet
 {
 
-LightBeaconModule::LightBeaconModule()
+const ros::Duration LightBeaconModule::kPeriod = ros::Duration{1.0/kFrequency};
+
+const ros::Duration LightBeaconModule::kPressDuration = ros::Duration{0.05};
+
+LightBeaconModule::LightBeaconModule(int servo_signal_pin, int servo_power_pin)
     : m_subscriber("beacon_mode", &LightBeaconModule::mode_msg_callback, this)
 {
-    // Power up the LED Beacon by setting kServoVCCPin to High
-    pinMode(kServoVCCPin, OUTPUT);
+    // Power up the LED Beacon by setting servo_power_pin to High
+    pinMode(servo_power_pin, OUTPUT);
     // NOTE: We hope these delays during construction does not affect the timing of the rest of the system to much.
     // TODO: Clean up delay for hardware power on sync.
     const auto press_duration_millis = static_cast<int>(press_duration().toSec() * 1000);
 
-    digitalWrite(kServoVCCPin, HIGH);
+    digitalWrite(servo_power_pin, HIGH);
     delay(press_duration_millis);
 
-    m_led_servo.attach(kServoPin);
+    m_led_servo.attach(servo_signal_pin);
     m_led_servo.write(kServoOff);
     // Wait for hardware to power on and react
     delay(press_duration_millis);
