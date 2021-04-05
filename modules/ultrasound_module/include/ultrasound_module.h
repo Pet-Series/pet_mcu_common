@@ -14,24 +14,16 @@
 namespace pet
 {
 
+template<int kSensorCount>
 class UltrasoundModule : public ArduinoModule
 {
 private:
     static constexpr double kFrequency = 30;
-    static constexpr auto   kPeriod = ros::Duration{1.0/kFrequency};
-    static constexpr auto   kTopicName = "dist_sensors";
-
-    static constexpr int kSensorCount = 3;
-
-    static constexpr int kTriggerPinRight  = 14;   // A0  "Right"
-    static constexpr int kEchoPinRight     = 14;   // A0  "Right"
-    static constexpr int kTriggerPinMid    = 15;   // A1  "Middle"
-    static constexpr int kEchoPinMid       = 15;   // A1  "Middle"
-    static constexpr int kTriggerPinLeft   = 16;   // A2  "Left"
-    static constexpr int kEchoPinLeft      = 16;   // A2  "Left"
+    static const ros::Duration kPeriod;
+    static constexpr auto kTopicName = "dist_sensors";
 
 public:
-    UltrasoundModule();
+    UltrasoundModule(const int pins[kSensorCount], const char* const frame_ids[kSensorCount]);
 
     ros::Time callback(const TimerEvent& event) override;
 
@@ -40,12 +32,39 @@ private:
     ros::Publisher m_publisher;
 
     int m_current_sensor = 0;
-    Ultrasound m_sensors[kSensorCount] = {
-        Ultrasound(kTriggerPinRight, kEchoPinRight, "dist_sensor_right"),
-        Ultrasound(kTriggerPinMid, kEchoPinMid, "dist_sensor_mid"),
-        Ultrasound(kTriggerPinLeft, kEchoPinLeft, "dist_sensor_left")
-    };
+    Ultrasound m_sensors[kSensorCount];
 };
+
+template<int kSensorCount>
+const ros::Duration UltrasoundModule<kSensorCount>::kPeriod = ros::Duration{1.0/kFrequency};
+
+template<int kSensorCount>
+UltrasoundModule<kSensorCount>::UltrasoundModule(const int pins[kSensorCount], const char* const frame_ids[kSensorCount])
+    : m_msg()
+    , m_publisher(kTopicName, &m_msg)
+{
+    for (int i = 0; i < kSensorCount; ++i) {
+        m_sensors[i] = Ultrasound{pins[i], pins[i], frame_ids[i]};
+    }
+
+    m_sensors[m_current_sensor].start_ping();
+    pet::nh.advertise(m_publisher);
+}
+
+template<int kSensorCount>
+ros::Time UltrasoundModule<kSensorCount>::callback(const TimerEvent& event)
+{
+    m_sensors[m_current_sensor].stop_ping();
+
+    m_msg.header.stamp = pet::nh.now();
+    m_msg.header.frame_id = m_sensors[m_current_sensor].frame_id();
+    m_msg.distance = m_sensors[m_current_sensor].get_distance();
+    m_publisher.publish(&m_msg);
+
+    m_current_sensor = (m_current_sensor + 1) % kSensorCount;
+    m_sensors[m_current_sensor].start_ping();
+    return event.desired_time + kPeriod;
+}
 
 } // namespace pet
 

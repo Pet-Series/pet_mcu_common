@@ -12,6 +12,7 @@ public:
     static constexpr int kMaxDistance = 400;  // [cm] Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 
 public:
+    Ultrasound() : Ultrasound(-1, -1, "") {}
     Ultrasound(int triggerPin, int echoPin, const char* frame_id);
 
     void start_ping();
