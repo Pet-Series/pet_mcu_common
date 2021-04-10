@@ -1,7 +1,13 @@
 <h1 align="center">Welcome to the Pet MCU Base repository</h1> 
 
-# Repository Content # 
-Source code to our Pet-series micro robots. 
+# Repository Content
+
+Source code to our Pet-series micro robots (target platforms).
+ Target platform | Short description 
+ -----|------ 
+[Pet-Mk-IV](https://github.com/kullken/Pet-Mk-IV) | https://github.com/kullken/Pet-Mk-IV
+Pet-Mk-V                                          | (does not yet have its own repository)
+  
 The main objective/scope for this repository is to control the firmware on our MCU's. 
 - Simplification: As MCU we mainly using Arduino compatible hardware, like Arduino UNO and Arduino NANO. 
 - Standardisation: As system integration tool (Middle ware) we use ROS. Each MCU act as an ROS-serial device. 
