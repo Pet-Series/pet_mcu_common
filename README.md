@@ -15,8 +15,8 @@ The main objective/scope for this repository is to control the firmware on our M
 
  Path | Short description 
  -----|------ 
- [pet_mcu_base/core/src/](https://github.com/kullken/pet_mcu_base/tree/main/core/src) | Basic functionality for interacting with ROS-serial
- [pet_mcu_base/modules/](https://github.com/kullken/pet_mcu_base/tree/main/modules) | Function specific modules. Controlling input(Sensors)/Output(Actuators) 
+ [pet_mcu_common/core/src/](https://github.com/kullken/pet_mcu_common/tree/main/core/src) | Basic functionality for interacting with ROS-serial
+ [pet_mcu_common/modules/](https://github.com/kullken/pet_mcu_common/tree/main/modules) | Function specific modules. Controlling input(Sensors)/Output(Actuators) 
 
 As "top node" we use ROS on Raspian/Ubuntu - Running Raspberry Pi hardware.
 

@@ -6,11 +6,11 @@ add_library(mcu_core INTERFACE)
 add_library(pet::mcu_core ALIAS mcu_core)
 target_sources(mcu_core
   INTERFACE
-    $<INSTALL_INTERFACE:share/pet_mcu_base/src/main.cpp>
-    $<INSTALL_INTERFACE:share/pet_mcu_base/src/rosserial_node.cpp>
-    $<INSTALL_INTERFACE:share/pet_mcu_base/src/timer.cpp>
-    $<INSTALL_INTERFACE:share/pet_mcu_base/src/arduino_module.cpp>
-    $<INSTALL_INTERFACE:share/pet_mcu_base/src/prgmem_string.cpp>
+    $<INSTALL_INTERFACE:share/pet_mcu_common/src/main.cpp>
+    $<INSTALL_INTERFACE:share/pet_mcu_common/src/rosserial_node.cpp>
+    $<INSTALL_INTERFACE:share/pet_mcu_common/src/timer.cpp>
+    $<INSTALL_INTERFACE:share/pet_mcu_common/src/arduino_module.cpp>
+    $<INSTALL_INTERFACE:share/pet_mcu_common/src/prgmem_string.cpp>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/rosserial_node.cpp>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/timer.cpp>
@@ -19,7 +19,7 @@ target_sources(mcu_core
 )
 target_include_directories(mcu_core
   INTERFACE
-    $<INSTALL_INTERFACE:include/pet_mcu_base>
+    $<INSTALL_INTERFACE:include/pet_mcu_common>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 target_link_libraries(mcu_core
@@ -28,11 +28,11 @@ target_link_libraries(mcu_core
 )
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/
-  DESTINATION share/pet_mcu_base/src
+  DESTINATION share/pet_mcu_common/src
 )
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
-  DESTINATION include/pet_mcu_base
+  DESTINATION include/pet_mcu_common
 )
 
 install(TARGETS mcu_core ros_lib
@@ -45,5 +45,5 @@ install(TARGETS mcu_core ros_lib
 install(EXPORT ${PROJECT_NAME}-export
   FILE ${PROJECT_NAME}Targets.cmake
   NAMESPACE pet::
-  DESTINATION share/pet_mcu_base/cmake
+  DESTINATION share/pet_mcu_common/cmake
 )

@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>pet_mcu_base</name>
+  <name>pet_mcu_common</name>
   <version>0.0.0</version>
-  <description>The pet_mcu_base package</description>
+  <description>The pet_mcu_common package</description>
 
   <maintainer email="karl.viktor.kull@gmail.com">Viktor Kull</maintainer>
 
   <license>MIT</license>
 
-  <url type="website">https://github.com/kullken/pet_mcu_base.git</url>
+  <url type="website">https://github.com/kullken/pet_mcu_common.git</url>
 
   <author email="karl.viktor.kull@gmail.com">Viktor Kull</author>
 

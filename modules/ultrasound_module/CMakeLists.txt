@@ -6,14 +6,14 @@ add_library(ultrasound_module INTERFACE)
 add_library(pet::ultrasound_module ALIAS ultrasound_module)
 target_sources(ultrasound_module
   INTERFACE
-    $<INSTALL_INTERFACE:share/pet_mcu_base/src/ultrasound_module.cpp>
-    $<INSTALL_INTERFACE:share/pet_mcu_base/src/ultrasound.cpp>
+    $<INSTALL_INTERFACE:share/pet_mcu_common/src/ultrasound_module.cpp>
+    $<INSTALL_INTERFACE:share/pet_mcu_common/src/ultrasound.cpp>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/ultrasound_module.cpp>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/ultrasound.cpp>
 )
 target_include_directories(ultrasound_module
   INTERFACE
-    $<INSTALL_INTERFACE:include/pet_mcu_base>
+    $<INSTALL_INTERFACE:include/pet_mcu_common>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 target_link_libraries(ultrasound_module
@@ -39,11 +39,11 @@ target_sources(new_ping
 )
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/
-  DESTINATION share/pet_mcu_base/src
+  DESTINATION share/pet_mcu_common/src
 )
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
-  DESTINATION include/pet_mcu_base
+  DESTINATION include/pet_mcu_common
 )
 
 install(TARGETS ultrasound_module new_ping
@@ -56,5 +56,5 @@ install(TARGETS ultrasound_module new_ping
 install(EXPORT ${PROJECT_NAME}-export
   FILE ${PROJECT_NAME}Targets.cmake
   NAMESPACE pet::
-  DESTINATION share/pet_mcu_base/cmake
+  DESTINATION share/pet_mcu_common/cmake
 )

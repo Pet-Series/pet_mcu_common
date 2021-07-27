@@ -6,12 +6,12 @@ add_library(light_beacon_module INTERFACE)
 add_library(pet::light_beacon_module ALIAS light_beacon_module)
 target_sources(light_beacon_module
   INTERFACE
-    $<INSTALL_INTERFACE:share/pet_mcu_base/src/light_beacon_module.cpp>
+    $<INSTALL_INTERFACE:share/pet_mcu_common/src/light_beacon_module.cpp>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/light_beacon_module.cpp>
 )
 target_include_directories(light_beacon_module
   INTERFACE
-    $<INSTALL_INTERFACE:include/pet_mcu_base>
+    $<INSTALL_INTERFACE:include/pet_mcu_common>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 target_link_libraries(light_beacon_module
@@ -37,11 +37,11 @@ target_sources(servo
 )
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/
-  DESTINATION share/pet_mcu_base/src
+  DESTINATION share/pet_mcu_common/src
 )
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
-  DESTINATION include/pet_mcu_base
+  DESTINATION include/pet_mcu_common
 )
 
 install(TARGETS light_beacon_module servo
@@ -54,5 +54,5 @@ install(TARGETS light_beacon_module servo
 install(EXPORT ${PROJECT_NAME}-export
   FILE ${PROJECT_NAME}Targets.cmake
   NAMESPACE pet::
-  DESTINATION share/pet_mcu_base/cmake
+  DESTINATION share/pet_mcu_common/cmake
 )

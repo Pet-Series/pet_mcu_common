@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.2)
 
-project(pet_mcu_base)
+project(pet_mcu_common)
 
 find_package(catkin REQUIRED COMPONENTS
   rosserial_arduino
@@ -18,6 +18,6 @@ add_subdirectory(modules/light_beacon_module)
 add_subdirectory(modules/line_sensor_module)
 add_subdirectory(modules/ultrasound_module)
 
-install(FILES "cmake/pet_mcu_baseConfig.cmake"
+install(FILES "cmake/pet_mcu_commonConfig.cmake"
   DESTINATION share/${PROJECT_NAME}/cmake
 )
