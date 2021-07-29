@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to the Pet MCU Base repository</h1> 
+<h1 align="center">Welcome to the Pet MCU Common repository</h1> 
 
 # Repository Content
 
