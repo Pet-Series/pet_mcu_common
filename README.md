@@ -1,12 +1,15 @@
 <h1 align="center">Welcome to the Pet MCU Common repository</h1> 
 
+ROS repository in the https://github.com/Pet-Series Git-Organizations.</br>
+
 # Repository Content
 
 Source code to our Pet-series micro robots (target platforms):
 
-Target platform | Short description | Target platform | Short description 
------|------|-----|------
-[Pet-Mk-IV](https://github.com/kullken/Pet-Mk-IV) | https://github.com/kullken/Pet-Mk-IV <br /><img src="https://github.com/kullken/Pet-Mk-IV/blob/293f4ad09226889b8ff6b598b1ec98cec6a682aa/Project_stuff/Images/2019-09-09_122725.jpg" width="250px"> | Pet-Mk-V  | (does not yet have its own repository)<br /><img src="https://github.com/kullken/Pet-Mk-IV/blob/b82ec939818c5a6b1f87542494a925afe0ad39d7/Project_stuff/Images/2021-04-07_224247(Pet-Mk-V).jpg" width="250px">
+Target platform | Short description 
+-----|------
+Pet-Mk-IV | https://github.com/Pet-Series/Pet-Mk-IV <br /><img src="https://github.com/Pet-Series/Pet-Mk-IV/blob/master/doc/pet_mk_iv-collage02.jpg" width="250px"> 
+Pet-Mk-V  | (does not yet have its own repository)<br /><img src="https://github.com/Pet-Series/Pet-Mk-IV/blob/master/doc/pet_mk_v-build_phase10.jpg" width="250px">
   
 The main objective/scope for this repository is to control the firmware on our MCU's. 
 - Simplification: As MCU we mainly using Arduino compatible hardware, like Arduino UNO and Arduino NANO. 
