@@ -6,7 +6,8 @@
 namespace pet
 {
 
-extern Timer<4> g_timer;
+constexpr int kMaxNumModules = 5;
+extern Timer<kMaxNumModules> g_timer;
 
 enum class ConfigResult
 {
