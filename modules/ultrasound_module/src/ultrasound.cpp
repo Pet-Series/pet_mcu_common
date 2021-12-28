@@ -6,7 +6,7 @@ namespace pet
 Ultrasound* Ultrasound::s_current_sensor = nullptr;
 
 Ultrasound::Ultrasound(int triggerPin, int echoPin, const char* id)
-    : m_sonar(triggerPin, echoPin, kMaxDistance)
+    : m_sonar(triggerPin, echoPin, kMaxDistance_cm)
     , m_id(id)
 {
 }
@@ -24,12 +24,12 @@ void Ultrasound::stop_ping()
     m_sonar.timer_stop();
 }
 
-int Ultrasound::get_distance() const
+float Ultrasound::get_distance() const
 {
     if (m_echo_recieved) {
-        return m_sonar.ping_result * 10 / US_ROUNDTRIP_CM;
+        return m_sonar.ping_result / (100 * US_ROUNDTRIP_CM);
     } else {
-        return -1;
+        return -1.0f;
     }
 }
 
