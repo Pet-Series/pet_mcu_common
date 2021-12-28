@@ -13,7 +13,7 @@ public:
 
 public:
     Ultrasound() : Ultrasound(-1, -1, "") {}
-    Ultrasound(int triggerPin, int echoPin, const char* frame_id);
+    Ultrasound(int triggerPin, int echoPin, const char* id);
 
     void start_ping();
     void stop_ping();
@@ -21,6 +21,7 @@ public:
     int get_distance() const;
 
     const char* frame_id() const;
+    const char* topic() const;
 
 private:
     void echo_check();
@@ -30,7 +31,7 @@ private:
 private:
     NewPing m_sonar;
     bool m_echo_recieved = false;
-    const char* m_frame_id;
+    const char* m_id;
 
     // TODO: Protect this from concurrent use. Maybe a mutex-like variable?
     static Ultrasound* s_current_sensor;

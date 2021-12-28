@@ -5,9 +5,9 @@ namespace pet
 
 Ultrasound* Ultrasound::s_current_sensor = nullptr;
 
-Ultrasound::Ultrasound(int triggerPin, int echoPin, const char* frame_id)
+Ultrasound::Ultrasound(int triggerPin, int echoPin, const char* id)
     : m_sonar(triggerPin, echoPin, kMaxDistance)
-    , m_frame_id(frame_id)
+    , m_id(id)
 {
 }
 
@@ -35,7 +35,12 @@ int Ultrasound::get_distance() const
 
 const char* Ultrasound::frame_id() const
 {
-    return m_frame_id;
+    return m_id;
+}
+
+const char* Ultrasound::topic() const
+{
+    return m_id;
 }
 
 // Note: This function will be called inside an interrupt.
