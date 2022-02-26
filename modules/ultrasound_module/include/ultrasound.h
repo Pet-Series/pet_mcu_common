@@ -9,18 +9,21 @@ namespace pet
 class Ultrasound
 {
 public:
-    static constexpr int kMaxDistance = 400;  // [cm] Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
+    static constexpr int kMinDistance_cm = 2;    // [cm] Minimum distance we trust the sensor for.
+    static constexpr int kMaxDistance_cm = 400;  // [cm] Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 
 public:
     Ultrasound() : Ultrasound(-1, -1, "") {}
-    Ultrasound(int triggerPin, int echoPin, const char* frame_id);
+    Ultrasound(int triggerPin, int echoPin, const char* id);
 
     void start_ping();
     void stop_ping();
 
-    int get_distance() const;
+    /// @return Measured distance in meters [m]
+    float get_distance() const;
 
     const char* frame_id() const;
+    const char* topic() const;
 
 private:
     void echo_check();
@@ -30,7 +33,7 @@ private:
 private:
     NewPing m_sonar;
     bool m_echo_recieved = false;
-    const char* m_frame_id;
+    const char* m_id;
 
     // TODO: Protect this from concurrent use. Maybe a mutex-like variable?
     static Ultrasound* s_current_sensor;
