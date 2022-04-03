@@ -7,7 +7,16 @@
 namespace pet
 {
 
-using NodeHandle = ::ros::NodeHandle_<ArduinoHardware, 8, 8, 128, 128>;
+constexpr int kMaxSubscribers   = 8;
+constexpr int kMaxPublishers    = 8;
+constexpr int kInputBufferSize  = 128;
+constexpr int kOutputBufferSize = 128;
+
+using NodeHandle = ::ros::NodeHandle_<ArduinoHardware,
+                                      kMaxSubscribers,
+                                      kMaxPublishers,
+                                      kInputBufferSize,
+                                      kOutputBufferSize>;
 
 // Use nh as a global variable since it would be messy to send it everywhere.
 extern NodeHandle nh;
