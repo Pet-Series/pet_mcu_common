@@ -3,6 +3,16 @@
 namespace pet
 {
 
+namespace
+{
+
+constexpr float centimeter_to_meter(float centimeter)
+{
+    return centimeter / 100.0f;
+}
+
+}
+
 Ultrasound* Ultrasound::s_current_sensor = nullptr;
 
 Ultrasound::Ultrasound(int triggerPin, int echoPin, const char* id)
@@ -27,7 +37,7 @@ void Ultrasound::stop_ping()
 float Ultrasound::get_distance() const
 {
     if (m_echo_recieved) {
-        return m_sonar.ping_result / (100.0f * US_ROUNDTRIP_CM);
+        return centimeter_to_meter(m_sonar.ping_result / US_ROUNDTRIP_CM);
     } else {
         return -1.0f;
     }
