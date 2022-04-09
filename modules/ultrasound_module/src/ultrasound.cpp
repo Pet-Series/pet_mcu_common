@@ -37,7 +37,7 @@ void Ultrasound::stop_ping()
 float Ultrasound::get_distance() const
 {
     if (m_echo_recieved) {
-        return centimeter_to_meter(m_sonar.ping_result / US_ROUNDTRIP_CM);
+        return centimeter_to_meter(m_sonar.ping_result / static_cast<float>(US_ROUNDTRIP_CM));
     } else {
         return -1.0f;
     }
