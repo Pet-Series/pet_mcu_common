@@ -1,4 +1,4 @@
-set(_supported_components core engine_module ir_remote_module light_beacon_module line_sensor_module ultrasound_module)
+set(_supported_components core engine_module ir_remote_module light_beacon_module line_sensor_module ultrasound_module ultrasound_legacy_module)
 
 foreach(_component ${pet_mcu_common_FIND_COMPONENTS})
     if(NOT _component IN_LIST _supported_components)

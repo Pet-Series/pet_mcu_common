@@ -17,6 +17,7 @@ add_subdirectory(modules/ir_remote_module)
 add_subdirectory(modules/light_beacon_module)
 add_subdirectory(modules/line_sensor_module)
 add_subdirectory(modules/ultrasound_module)
+add_subdirectory(modules/ultrasound_legacy_module)
 
 install(FILES "cmake/pet_mcu_commonConfig.cmake"
   DESTINATION share/${PROJECT_NAME}/cmake
