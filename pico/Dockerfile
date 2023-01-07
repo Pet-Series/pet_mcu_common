@@ -35,3 +35,12 @@ RUN git clone https://github.com/micro-ROS/micro_ros_msgs.git
 WORKDIR /home/pi/micro_ros_ws
 
 RUN source /opt/ros/humble/setup.bash && colcon build --packages-up-to micro_ros_agent
+
+# Running micro_ros_agent requires sudo to get permission to access the usb device.
+USER root
+
+## Commands for running the example ##
+# docker run -it --volume /media/vk:/media/pi --device=/dev/ttyACM0 pico_poc
+
+# source install/setup.bash
+# ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyACM0 baudrate=115200
