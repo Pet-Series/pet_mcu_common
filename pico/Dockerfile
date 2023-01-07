@@ -25,3 +25,13 @@ WORKDIR /home/pi/micro_ros_ws/src/micro_ros_raspberrypi_pico_sdk
 RUN mkdir build
 RUN cd build && cmake ..
 RUN cd build && make
+
+# Build micro_ros_agent from source
+WORKDIR /home/pi/micro_ros_ws/src
+
+RUN git clone https://github.com/micro-ROS/micro-ROS-Agent.git
+RUN git clone https://github.com/micro-ROS/micro_ros_msgs.git
+
+WORKDIR /home/pi/micro_ros_ws
+
+RUN source /opt/ros/humble/setup.bash && colcon build --packages-up-to micro_ros_agent
