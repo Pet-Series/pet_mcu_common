@@ -7,6 +7,7 @@ SHELL ["/bin/bash", "-c"]
 RUN apt-get update && sudo apt install -y build-essential cmake gcc-arm-none-eabi libnewlib-arm-none-eabi
 
 RUN groupadd --system pi && useradd --create-home --shell /bin/bash --gid pi pi
+RUN usermod --append --groups dialout pi
 
 USER pi
 
@@ -36,11 +37,6 @@ WORKDIR /home/pi/micro_ros_ws
 
 RUN source /opt/ros/humble/setup.bash && colcon build --packages-up-to micro_ros_agent
 
-# Running micro_ros_agent requires sudo to get permission to access the usb device.
-USER root
-
 ## Commands for running the example ##
-# docker run -it --volume /media/vk:/media/pi --device=/dev/ttyACM0 pico_poc
-
-# source install/setup.bash
+# docker run -it --rm --volume /media/vk:/media/pi --device=/dev/ttyACM0 pico_poc
 # ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyACM0 baudrate=115200
