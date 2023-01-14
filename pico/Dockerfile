@@ -36,6 +36,7 @@ RUN git clone https://github.com/micro-ROS/micro_ros_msgs.git
 WORKDIR /home/pi/micro_ros_ws
 
 RUN source /opt/ros/humble/setup.bash && colcon build --packages-up-to micro_ros_agent
+RUN echo "source /home/pi/micro_ros_ws/install/setup.bash" >> /home/pi/.bashrc
 
 ## Commands for running the example ##
 # docker run -it --rm --volume /media/vk:/media/pi --device=/dev/ttyACM0 pico_poc
