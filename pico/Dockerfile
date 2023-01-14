@@ -38,6 +38,7 @@ WORKDIR /home/pi/micro_ros_ws
 RUN source /opt/ros/humble/setup.bash && colcon build --packages-up-to micro_ros_agent
 RUN echo "source /home/pi/micro_ros_ws/install/setup.bash" >> /home/pi/.bashrc
 
+RUN mkdir --parents src/pet_mcu_common
 ## Commands for running the example ##
-# docker run -it --rm --volume /media/vk:/media/pi --device=/dev/ttyACM0 pico_poc
+# docker run -it --rm --volume /media/vk:/media/pi --volume /home/vk/ros_ws/src/pet_mcu_common:/home/pi/micro_ros_ws/src/pet_mcu_common --device=/dev/ttyACM0 pico_poc
 # ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyACM0 baudrate=115200
