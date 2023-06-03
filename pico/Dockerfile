@@ -38,7 +38,45 @@ WORKDIR /home/pi/micro_ros_ws
 RUN source /opt/ros/humble/setup.bash && colcon build --packages-up-to micro_ros_agent
 RUN echo "source /home/pi/micro_ros_ws/install/setup.bash" >> /home/pi/.bashrc
 
+# Create a folder to mount pet_mcu_common repository from host as a volume.
 RUN mkdir --parents src/pet_mcu_common
+
+# Install picotool from source
+USER root
+RUN apt-get update && sudo apt install -y pkg-config libusb-1.0-0-dev
+
+USER pi
+WORKDIR /home/pi/micro_ros_ws/src
+
+RUN git clone https://github.com/raspberrypi/picotool.git
+
+WORKDIR /home/pi/micro_ros_ws/src/picotool
+
+RUN mkdir build
+RUN cd build && cmake ..
+RUN cd build && make
+
+USER root
+RUN mkdir --parents /etc/udev/rules.d
+RUN touch /etc/udev/rules.d/99-picotool.rules
+# RUN echo 'SUBSYSTEM=="tty", ATTRS{idVendor}=="2e8a", MODE="660", GROUP="plugdev"' >> /etc/udev/rules.d/99-picotool.rules
+RUN echo 'SUBSYSTEM=="tty", ATTRS{idVendor}=="2e8a", ATTRS{idProduct}=="0003", MODE="660", GROUP="plugdev"' >> /etc/udev/rules.d/99-picotool.rules
+RUN echo 'SUBSYSTEM=="tty", ATTRS{idVendor}=="2e8a", ATTRS{idProduct}=="000a", MODE="660", GROUP="plugdev"' >> /etc/udev/rules.d/99-picotool.rules
+
+RUN usermod --append --groups plugdev,sudo pi
+
+RUN echo "pi:passwd" | chpasswd
+USER pi
+
+
+# USER root
+# RUN apt update && apt install code -y
+# RUN code --install-extension ms-vscode.cpptools \
+#                              twxs.cmake \
+#                              ms-python.python \
+#                              mhutchie.git-graph
+# USER pi
+
 ## Commands for running the example ##
 # docker run -it --rm --volume /media/vk:/media/pi --volume /home/vk/ros_ws/src/pet_mcu_common:/home/pi/micro_ros_ws/src/pet_mcu_common --device=/dev/ttyACM0 pico_poc
 # ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyACM0 baudrate=115200
