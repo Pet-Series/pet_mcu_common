@@ -30,7 +30,7 @@ RUN cd build && make
 # Build micro_ros_agent from source
 WORKDIR /home/pi/micro_ros_ws/src
 
-RUN git clone https://github.com/micro-ROS/micro-ROS-Agent.git
+RUN git clone https://github.com/micro-ROS/micro-ROS-Agent.git --branch humble
 RUN git clone https://github.com/micro-ROS/micro_ros_msgs.git
 
 WORKDIR /home/pi/micro_ros_ws
