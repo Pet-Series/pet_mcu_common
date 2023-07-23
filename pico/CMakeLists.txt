@@ -8,7 +8,11 @@ set(CMAKE_CXX_STANDARD 17)
 
 pico_sdk_init()
 
-link_directories(${CMAKE_CURRENT_SOURCE_DIR}/microros_static_library/libmicroros)
+# Linking against "our" version of libmicroros does not work, yet. In the meantime we link against a pre-built version.
+set(libmicroros_directory ${CMAKE_CURRENT_SOURCE_DIR}/microros_static_library/libmicroros)
+# set(libmicroros_directory ${CMAKE_CURRENT_SOURCE_DIR}/microros_static_library/firmware/build)
+
+link_directories(${libmicroros_directory})
 
 add_executable(pico_firmware
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
@@ -23,8 +27,15 @@ target_link_libraries(pico_firmware
 target_include_directories(pico_firmware
   PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/microros_static_library/libmicroros/include
+    ${libmicroros_directory}/include
 )
+
+# Workaround for https://github.com/micro-ROS/micro_ros_setup/issues/530
+# file(GLOB_RECURSE extra_microros_include_directories LIST_DIRECTORIES true ${libmicroros_directory})
+# target_include_directories(pico_firmware
+#   PUBLIC
+#     ${extra_microros_include_directories}
+# )
 
 SET(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -ffunction-sections -fdata-sections")
 SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -ffunction-sections -fdata-sections")
