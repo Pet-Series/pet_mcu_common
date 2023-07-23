@@ -15,10 +15,17 @@ const uint LED_PIN = 25;
 rcl_publisher_t publisher;
 std_msgs__msg__Int32 msg;
 
-void timer_callback(rcl_timer_t *timer, int64_t last_call_time)
+void publish_callback(rcl_timer_t *timer, int64_t last_call_time)
 {
     rcl_ret_t ret = rcl_publish(&publisher, &msg, NULL);
     msg.data++;
+}
+
+void blink_callback(rcl_timer_t *timer, int64_t last_call_time)
+{
+    static bool led_status = true;
+    gpio_put(LED_PIN, led_status);
+    led_status = !led_status;
 }
 
 int main()
@@ -35,7 +42,8 @@ int main()
     gpio_init(LED_PIN);
     gpio_set_dir(LED_PIN, GPIO_OUT);
 
-    rcl_timer_t timer;
+    rcl_timer_t publish_timer;
+    rcl_timer_t blink_timer;
     rcl_node_t node;
     rcl_allocator_t allocator;
     rclc_support_t support;
@@ -65,15 +73,20 @@ int main()
         "pico_publisher");
 
     rclc_timer_init_default(
-        &timer,
+        &publish_timer,
         &support,
         RCL_MS_TO_NS(1000),
-        timer_callback);
+        publish_callback);
 
-    rclc_executor_init(&executor, &support.context, 1, &allocator);
-    rclc_executor_add_timer(&executor, &timer);
+    rclc_timer_init_default(
+        &blink_timer,
+        &support,
+        RCL_MS_TO_NS(500),
+        blink_callback);
 
-    gpio_put(LED_PIN, 1);
+    rclc_executor_init(&executor, &support.context, 2, &allocator);
+    rclc_executor_add_timer(&executor, &publish_timer);
+    rclc_executor_add_timer(&executor, &blink_timer);
 
     msg.data = 0;
     while (true)
