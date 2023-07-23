@@ -52,3 +52,6 @@ qtcreator-*
 
 # Catkin custom files
 CATKIN_IGNORE
+
+# MicroROS build environment
+pico/microros_static_library/firmware
