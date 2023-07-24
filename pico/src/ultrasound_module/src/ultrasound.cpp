@@ -31,7 +31,7 @@ Ultrasound::Ultrasound(int trigger_pin, int echo_pin, const char* id)
     , m_id(id)
     , m_max_echo_time_us()
 {
-    m_max_echo_time_us = kMaxDistance_cm * US_ROUNDTRIP_CM + (US_ROUNDTRIP_CM / 2);
+    m_max_echo_time_us = kMaxDistance_cm * kUsRoundtripCm + (kUsRoundtripCm / 2);
 }
 
 void Ultrasound::start_ping()
@@ -54,7 +54,7 @@ void Ultrasound::stop_ping()
 float Ultrasound::get_distance() const
 {
     if (m_echo_recieved) {
-        return centimeter_to_meter(m_sonar.ping_result / static_cast<float>(US_ROUNDTRIP_CM));
+        return centimeter_to_meter(m_sonar.ping_result / static_cast<float>(kUsRoundtripCm));
     } else {
         return -1.0f;
     }

@@ -11,6 +11,7 @@ class Ultrasound
 public:
     static constexpr int kMinDistance_cm = 2;    // [cm] Minimum distance we trust the sensor for.
     static constexpr int kMaxDistance_cm = 400;  // [cm] Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
+    static constexpr int kUsRoundtripCm  = 57;   // [us * 2cm^-1] Microseconds it takes sound to travel round-trip 1cm (2cm total).
 
 public:
     Ultrasound() : Ultrasound(-1, -1, "") {}
