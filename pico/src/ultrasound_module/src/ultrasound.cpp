@@ -29,7 +29,9 @@ Ultrasound::Ultrasound(int trigger_pin, int echo_pin, const char* id)
     , m_trigger_pin(trigger_pin)
     , m_echo_pin(echo_pin)
     , m_id(id)
+    , m_max_echo_time_us()
 {
+    m_max_echo_time_us = kMaxDistance_cm * US_ROUNDTRIP_CM + (US_ROUNDTRIP_CM / 2);
 }
 
 void Ultrasound::start_ping()
@@ -102,7 +104,7 @@ bool Ultrasound::ping_trigger()
     }
 
     // Maximum time we'll wait for ping to start (most sensors are <450uS, the SRF06 can take up to 34,300uS!)
-    m_sonar._max_time = micros() + m_sonar._maxEchoTime + MAX_SENSOR_DELAY;
+    m_sonar._max_time = micros() + m_max_echo_time_us + MAX_SENSOR_DELAY;
     while (!gpio_get(m_echo_pin))               // Wait for ping to start.
     {
         if (micros() > m_sonar._max_time)
@@ -111,7 +113,7 @@ bool Ultrasound::ping_trigger()
         }
     }
 
-	m_sonar._max_time = micros() + m_sonar._maxEchoTime; // Ping started, set the time-out.
+	m_sonar._max_time = micros() + m_max_echo_time_us; // Ping started, set the time-out.
 	return true;                                         // Ping started successfully.
 }
 

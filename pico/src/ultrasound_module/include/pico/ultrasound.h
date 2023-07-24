@@ -38,6 +38,8 @@ private:
     bool m_echo_recieved = false;
     const char* m_id;
 
+    int m_max_echo_time_us;
+
     // TODO: Protect this from concurrent use. Maybe a mutex-like variable?
     static Ultrasound* s_current_sensor;
 };
