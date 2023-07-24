@@ -20,6 +20,7 @@ target_link_libraries(pico_ultrasound_module
   INTERFACE
     # pet::mcu_core
     # pet::ros_lib
+    pico_stdlib
 )
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/

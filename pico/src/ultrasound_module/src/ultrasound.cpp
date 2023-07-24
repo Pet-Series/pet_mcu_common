@@ -1,5 +1,7 @@
 #include "pico/ultrasound.h"
 
+#include <pico/stdlib.h>
+
 namespace pet
 {
 namespace pico
@@ -77,26 +79,26 @@ bool Ultrasound::ping_trigger()
 {
 	if (m_sonar._one_pin_mode)
     {
-        pinMode(m_trigger_pin, OUTPUT);  // Set trigger pin to output.
+        gpio_set_dir(m_trigger_pin, GPIO_OUT);  // Set trigger pin to output.
     }
 
-	digitalWrite(m_trigger_pin, HIGH);  // Set trigger pin high, this tells the sensor to send out a ping.
-	delayMicroseconds(TRIGGER_WIDTH); // Wait long enough for the sensor to realize the trigger pin is high.
-	digitalWrite(m_trigger_pin, LOW);   // Set trigger pin back to low.
+	gpio_put(m_trigger_pin, GPIO_HIGH);  // Set trigger pin high, this tells the sensor to send out a ping.
+	delayMicroseconds(TRIGGER_WIDTH);    // Wait long enough for the sensor to realize the trigger pin is high.
+	gpio_put(m_trigger_pin, GPIO_LOW);   // Set trigger pin back to low.
 
 	if (m_sonar._one_pin_mode)
     {
-        pinMode(m_trigger_pin, INPUT); // Set trigger pin to input (this is technically setting the echo pin to input as both are tied to the same pin).
+        gpio_set_dir(m_trigger_pin, GPIO_IN); // Set trigger pin to input (this is technically setting the echo pin to input as both are tied to the same pin).
     }
 
-    if (digitalRead(m_echo_pin))
+    if (gpio_get(m_echo_pin))
     {
         return false;                // Previous ping hasn't finished, abort.
     }
 
     // Maximum time we'll wait for ping to start (most sensors are <450uS, the SRF06 can take up to 34,300uS!)
     m_sonar._max_time = micros() + m_sonar._maxEchoTime + MAX_SENSOR_DELAY;
-    while (!digitalRead(m_echo_pin))               // Wait for ping to start.
+    while (!gpio_get(m_echo_pin))               // Wait for ping to start.
     {
         if (micros() > m_sonar._max_time)
         {
