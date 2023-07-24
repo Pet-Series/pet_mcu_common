@@ -20,22 +20,6 @@ target_link_libraries(ultrasound_module
   INTERFACE
     pet::mcu_core
     pet::ros_lib
-    new_ping
-)
-
-set(ARDUINO_LIBRARIES_PATH $ENV{HOME}/Arduino/libraries)
-
-# NewPing Arduino library
-set(NEW_PING_LIB_PATH ${ARDUINO_LIBRARIES_PATH}/NewPing/src)
-
-add_library(new_ping INTERFACE)
-target_include_directories(new_ping
-  INTERFACE
-    ${NEW_PING_LIB_PATH}
-)
-target_sources(new_ping
-  INTERFACE
-    ${NEW_PING_LIB_PATH}/NewPing.cpp
 )
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/
@@ -46,7 +30,7 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
   DESTINATION include/pet_mcu_common
 )
 
-install(TARGETS ultrasound_module new_ping
+install(TARGETS ultrasound_module
   EXPORT ${PROJECT_NAME}-export
   ARCHIVE DESTINATION lib/${PROJECT_NAME}
   LIBRARY DESTINATION lib/${PROJECT_NAME}

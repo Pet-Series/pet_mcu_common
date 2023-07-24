@@ -1,8 +1,6 @@
 #ifndef PET_PICO_ULTRASOUND_H
 #define PET_PICO_ULTRASOUND_H
 
-#include <NewPing.h>
-
 namespace pet
 {
 namespace pico
@@ -35,7 +33,6 @@ private:
     static void interrupt_callback();
 
 private:
-    NewPing m_sonar;
     int m_trigger_pin;
     int m_echo_pin;
     bool m_echo_recieved = false;
