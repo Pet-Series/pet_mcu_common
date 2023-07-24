@@ -30,6 +30,8 @@ public:
 private:
     void echo_check();
 
+    bool ping_trigger(); // From NewPing
+
     static void interrupt_callback();
 
 private:
