@@ -25,13 +25,26 @@ auto micros()
 Ultrasound* Ultrasound::s_current_sensor = nullptr;
 
 Ultrasound::Ultrasound(int trigger_pin, int echo_pin, const char* id)
-    : m_sonar(trigger_pin, echo_pin, kMaxDistance_cm)
-    , m_trigger_pin(trigger_pin)
+    : m_trigger_pin(trigger_pin)
     , m_echo_pin(echo_pin)
     , m_id(id)
-    , m_max_echo_time_us()
+    , m_max_echo_time_us(kMaxDistance_cm * kUsRoundtripCm + (kUsRoundtripCm / 2))
 {
-    m_max_echo_time_us = kMaxDistance_cm * kUsRoundtripCm + (kUsRoundtripCm / 2);
+    if (m_trigger_pin == m_echo_pin)
+    {
+        gpio_init(m_trigger_pin);
+        gpio_set_dir(m_trigger_pin, GPIO_IN);
+        m_one_pin_mode = true;
+    }
+    else
+    {
+        gpio_init(m_trigger_pin);
+        gpio_set_dir(m_trigger_pin, GPIO_OUT);
+        gpio_init(m_echo_pin);
+        gpio_set_dir(m_echo_pin, GPIO_IN);
+        m_one_pin_mode = false;
+    }
+    gpio_put(m_trigger_pin, GPIO_LOW);
 }
 
 void Ultrasound::start_ping()
@@ -84,7 +97,7 @@ void Ultrasound::interrupt_callback()
 
 bool Ultrasound::ping_trigger()
 {
-	if (m_sonar._one_pin_mode)
+	if (m_one_pin_mode)
     {
         gpio_set_dir(m_trigger_pin, GPIO_OUT);  // Set trigger pin to output.
     }
@@ -93,7 +106,7 @@ bool Ultrasound::ping_trigger()
 	delayMicroseconds(TRIGGER_WIDTH);    // Wait long enough for the sensor to realize the trigger pin is high.
 	gpio_put(m_trigger_pin, GPIO_LOW);   // Set trigger pin back to low.
 
-	if (m_sonar._one_pin_mode)
+	if (m_one_pin_mode)
     {
         gpio_set_dir(m_trigger_pin, GPIO_IN); // Set trigger pin to input (this is technically setting the echo pin to input as both are tied to the same pin).
     }
