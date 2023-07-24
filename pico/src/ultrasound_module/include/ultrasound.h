@@ -16,7 +16,7 @@ public:
 
 public:
     Ultrasound() : Ultrasound(-1, -1, "") {}
-    Ultrasound(int triggerPin, int echoPin, const char* id);
+    Ultrasound(int trigger_pin, int echo_pin, const char* id);
 
     void start_ping();
     void stop_ping();
@@ -36,6 +36,8 @@ private:
 
 private:
     NewPing m_sonar;
+    int m_trigger_pin;
+    int m_echo_pin;
     bool m_echo_recieved = false;
     const char* m_id;
 

@@ -17,8 +17,10 @@ constexpr float centimeter_to_meter(float centimeter)
 
 Ultrasound* Ultrasound::s_current_sensor = nullptr;
 
-Ultrasound::Ultrasound(int triggerPin, int echoPin, const char* id)
-    : m_sonar(triggerPin, echoPin, kMaxDistance_cm)
+Ultrasound::Ultrasound(int trigger_pin, int echo_pin, const char* id)
+    : m_sonar(trigger_pin, echo_pin, kMaxDistance_cm)
+    , m_trigger_pin(trigger_pin)
+    , m_echo_pin(echo_pin)
     , m_id(id)
 {
 }
@@ -75,26 +77,26 @@ bool Ultrasound::ping_trigger()
 {
 	if (m_sonar._one_pin_mode)
     {
-        pinMode(_triggerPin, OUTPUT);  // Set trigger pin to output.
+        pinMode(m_trigger_pin, OUTPUT);  // Set trigger pin to output.
     }
 
-	digitalWrite(m_sonar._triggerPin, HIGH);  // Set trigger pin high, this tells the sensor to send out a ping.
+	digitalWrite(m_trigger_pin, HIGH);  // Set trigger pin high, this tells the sensor to send out a ping.
 	delayMicroseconds(TRIGGER_WIDTH); // Wait long enough for the sensor to realize the trigger pin is high.
-	digitalWrite(m_sonar._triggerPin, LOW);   // Set trigger pin back to low.
+	digitalWrite(m_trigger_pin, LOW);   // Set trigger pin back to low.
 
 	if (m_sonar._one_pin_mode)
     {
-        pinMode(m_sonar._triggerPin, INPUT); // Set trigger pin to input (this is technically setting the echo pin to input as both are tied to the same pin).
+        pinMode(m_trigger_pin, INPUT); // Set trigger pin to input (this is technically setting the echo pin to input as both are tied to the same pin).
     }
 
-    if (digitalRead(m_sonar._echoPin))
+    if (digitalRead(m_echo_pin))
     {
         return false;                // Previous ping hasn't finished, abort.
     }
 
     // Maximum time we'll wait for ping to start (most sensors are <450uS, the SRF06 can take up to 34,300uS!)
     m_sonar._max_time = micros() + m_sonar._maxEchoTime + MAX_SENSOR_DELAY;
-    while (!digitalRead(m_sonar._echoPin))               // Wait for ping to start.
+    while (!digitalRead(m_echo_pin))               // Wait for ping to start.
     {
         if (micros() > m_sonar._max_time)
         {
