@@ -27,7 +27,11 @@ void Ultrasound::start_ping()
 {
     m_echo_recieved = false;
     s_current_sensor = this;
-    m_sonar.ping_timer(Ultrasound::interrupt_callback);
+    if (!m_sonar.ping_trigger()) // Trigger a ping, if it returns false, return without starting the echo timer.
+    {
+        return;
+    }
+    m_sonar.timer_us(ECHO_TIMER_FREQ, Ultrasound::interrupt_callback); // Set ping echo timer check every ECHO_TIMER_FREQ uS.
 }
 
 void Ultrasound::stop_ping()
