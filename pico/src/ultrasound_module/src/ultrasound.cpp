@@ -2,6 +2,8 @@
 
 namespace pet
 {
+namespace pico
+{
 
 namespace
 {
@@ -65,4 +67,5 @@ void Ultrasound::interrupt_callback()
     s_current_sensor->echo_check();
 }
 
+} // namespace pico
 } // namespace pet

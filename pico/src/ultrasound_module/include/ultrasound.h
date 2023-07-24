@@ -1,9 +1,11 @@
-#ifndef PET_ULTRASOUND_H
-#define PET_ULTRASOUND_H
+#ifndef PET_PICO_ULTRASOUND_H
+#define PET_PICO_ULTRASOUND_H
 
 #include <NewPing.h>
 
 namespace pet
+{
+namespace pico
 {
 
 class Ultrasound
@@ -39,6 +41,7 @@ private:
     static Ultrasound* s_current_sensor;
 };
 
+} // namespace pico
 } // namespace pet
 
-#endif // PET_ULTRASOUND_H
+#endif // PET_PICO_ULTRASOUND_H
