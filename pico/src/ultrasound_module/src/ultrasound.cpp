@@ -15,6 +15,11 @@ constexpr float centimeter_to_meter(float centimeter)
     return centimeter / 100.0f;
 }
 
+auto micros()
+{
+    return to_us_since_boot(get_absolute_time());
+}
+
 }
 
 Ultrasound* Ultrasound::s_current_sensor = nullptr;
