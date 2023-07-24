@@ -8,6 +8,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 pico_sdk_init()
 
+add_subdirectory(src/ultrasound_module)
+
 # Linking against "our" version of libmicroros does not work, yet. In the meantime we link against a pre-built version.
 set(libmicroros_directory ${CMAKE_CURRENT_SOURCE_DIR}/microros_static_library/libmicroros)
 # set(libmicroros_directory ${CMAKE_CURRENT_SOURCE_DIR}/microros_static_library/firmware/build)
@@ -22,6 +24,7 @@ add_executable(pico_firmware
 target_link_libraries(pico_firmware
     pico_stdlib
     microros
+    pet::pico_ultrasound_module
 )
 
 target_include_directories(pico_firmware
