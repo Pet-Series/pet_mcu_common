@@ -69,7 +69,7 @@ void Ultrasound::stop_ping()
 float Ultrasound::get_distance() const
 {
     if (m_echo_recieved) {
-        return centimeter_to_meter(m_sonar.ping_result / static_cast<float>(kUsRoundtripCm));
+        return centimeter_to_meter(m_ping_duration_us / static_cast<float>(kUsRoundtripCm));
     } else {
         return -1.0f;
     }
@@ -88,7 +88,21 @@ const char* Ultrasound::topic() const
 // Note: This function will be called inside an interrupt.
 void Ultrasound::echo_check()
 {
-    m_echo_recieved = m_sonar.check_timer();
+    if (micros() > m_ping_timeout_us) { // Outside the time-out limit.
+        timer_stop();           // Disable timer interrupt
+        m_echo_recieved = false;
+        return;
+    }
+
+    if (!gpio_get(m_echo_pin)) { // Ping echo received. TODO: Wrap "!gpio_get(m_echo_pin)" in named function.
+        timer_stop();                // Disable timer interrupt
+        m_ping_duration_us = (micros() - (m_ping_timeout_us - m_max_echo_time_us) - kPingTimerOverhead_us); // Calculate ping time including overhead.
+        m_echo_recieved = true;
+    }
+    else
+    {
+        m_echo_recieved = false; // false because there's no ping echo yet.
+    }
 }
 
 // Note: This function will be called inside an interrupt.
@@ -129,7 +143,7 @@ bool Ultrasound::ping_trigger()
         }
     }
 
-	m_sonar._max_time = micros() + m_max_echo_time_us; // Ping started, set the time-out.
+	m_ping_timeout_us = micros() + m_max_echo_time_us; // Ping started, set the time-out.
 	return true;                                         // Ping started successfully.
 }
 
