@@ -116,11 +116,11 @@ bool Ultrasound::ping_trigger()
         return false;                // Previous ping hasn't finished, abort.
     }
 
-    // Maximum time we'll wait for ping to start (most sensors are <450uS, the SRF06 can take up to 34,300uS!)
-    m_sonar._max_time = micros() + m_max_echo_time_us + MAX_SENSOR_DELAY;
-    while (!gpio_get(m_echo_pin))               // Wait for ping to start.
+    // Maximum time we'll wait for ping to start.
+    const uint64_t starting_timeout = micros() + m_max_echo_time_us + kMaxSensorDelay_us;
+    while (!gpio_get(m_echo_pin))
     {
-        if (micros() > m_sonar._max_time)
+        if (micros() > starting_timeout)
         {
             return false;                                // Took too long to start, abort.
         }
