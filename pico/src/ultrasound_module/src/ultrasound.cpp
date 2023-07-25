@@ -22,8 +22,6 @@ auto micros()
 
 }
 
-Ultrasound* Ultrasound::s_current_sensor = nullptr;
-
 Ultrasound::Ultrasound(int trigger_pin, int echo_pin, const char* id)
     : m_trigger_pin(trigger_pin)
     , m_echo_pin(echo_pin)
@@ -51,18 +49,16 @@ bool Ultrasound::start_ping()
 {
     stop_ping();
     m_echo_recieved = false;
-    s_current_sensor = this;
     if (!ping_trigger()) // Trigger a ping, if it returns false, return without starting the echo timer.
     {
         return false;
     }
 
-    return add_repeating_timer_us(kEchoTimerFreq_us, Ultrasound::interrupt_callback, nullptr, &m_timer_info);
+    return add_repeating_timer_us(kEchoTimerFreq_us, Ultrasound::interrupt_callback, this, &m_timer_info);
 }
 
 void Ultrasound::stop_ping()
 {
-    s_current_sensor = nullptr;
     if (m_timer_info.alarm_id > 0) // If timer is active, cancel it.
     {
         cancel_repeating_timer(&m_timer_info);
@@ -108,7 +104,8 @@ bool Ultrasound::echo_check()
 
 bool Ultrasound::interrupt_callback(repeating_timer_t *timer_info)
 {
-    return s_current_sensor->echo_check();;
+    Ultrasound *current_sensor = reinterpret_cast<Ultrasound *>(timer_info->user_data);
+    return current_sensor->echo_check();
 }
 
 bool Ultrasound::ping_trigger()

@@ -61,9 +61,6 @@ private:
     bool m_one_pin_mode;
 
     repeating_timer_t m_timer_info;
-
-    // TODO: Protect this from concurrent use. Maybe a mutex-like variable?
-    static Ultrasound* s_current_sensor;
 };
 
 } // namespace pico
