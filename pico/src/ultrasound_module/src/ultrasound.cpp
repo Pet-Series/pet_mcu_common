@@ -26,7 +26,6 @@ Ultrasound::Ultrasound(int trigger_pin, int echo_pin, const char* id)
     : m_trigger_pin(trigger_pin)
     , m_echo_pin(echo_pin)
     , m_id(id)
-    , m_max_echo_time_us(kMaxDistance_cm * kUsRoundtripCm + (kUsRoundtripCm / 2))
 {
     if (m_trigger_pin == m_echo_pin)
     {
@@ -93,7 +92,7 @@ bool Ultrasound::echo_check()
     }
 
     if (!gpio_get(m_echo_pin)) { // Ping echo received. TODO: Wrap "!gpio_get(m_echo_pin)" in named function.
-        m_ping_duration_us = (micros() - (m_ping_timeout_us - m_max_echo_time_us) - kPingTimerOverhead_us); // Calculate ping time including overhead.
+        m_ping_duration_us = (micros() - (m_ping_timeout_us - kMaxEchoDuration_us) - kPingTimerOverhead_us); // Calculate ping time including overhead.
         m_echo_recieved = true;
         return false; // Disable timer interrupt.
     }
@@ -130,7 +129,7 @@ bool Ultrasound::ping_trigger()
     }
 
     // Maximum time we'll wait for ping to start.
-    const uint64_t starting_timeout = micros() + m_max_echo_time_us + kMaxSensorDelay_us;
+    const uint64_t starting_timeout = micros() + kMaxEchoDuration_us + kMaxSensorDelay_us;
     while (!gpio_get(m_echo_pin))
     {
         if (micros() > starting_timeout)
@@ -139,7 +138,7 @@ bool Ultrasound::ping_trigger()
         }
     }
 
-	m_ping_timeout_us = micros() + m_max_echo_time_us; // Ping started, set the time-out.
+	m_ping_timeout_us = micros() + kMaxEchoDuration_us; // Ping started, set the time-out.
 	return true;                                         // Ping started successfully.
 }
 
