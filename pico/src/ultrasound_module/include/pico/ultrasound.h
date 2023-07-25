@@ -38,10 +38,12 @@ public:
     const char* topic() const;
 
 private:
-    void echo_check();
+    /// @return true to continue repeating, false to stop.
+    bool echo_check();
 
     bool ping_trigger(); // From NewPing
 
+    /// @return true to continue repeating, false to stop.
     static bool interrupt_callback(repeating_timer_t *timer_info);
 
 private:

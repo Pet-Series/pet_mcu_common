@@ -49,6 +49,7 @@ Ultrasound::Ultrasound(int trigger_pin, int echo_pin, const char* id)
 
 bool Ultrasound::start_ping()
 {
+    stop_ping();
     m_echo_recieved = false;
     s_current_sensor = this;
     if (!ping_trigger()) // Trigger a ping, if it returns false, return without starting the echo timer.
@@ -56,14 +57,16 @@ bool Ultrasound::start_ping()
         return false;
     }
 
-    /// TODO: Ensure previous timer is not running.
     return add_repeating_timer_us(kEchoTimerFreq_us, Ultrasound::interrupt_callback, nullptr, &m_timer_info);
 }
 
 void Ultrasound::stop_ping()
 {
     s_current_sensor = nullptr;
-    m_sonar.timer_stop();
+    if (m_timer_info.alarm_id > 0) // If timer is active, cancel it.
+    {
+        cancel_repeating_timer(&m_timer_info);
+    }
 }
 
 float Ultrasound::get_distance() const
@@ -86,30 +89,28 @@ const char* Ultrasound::topic() const
 }
 
 // Note: This function will be called inside an interrupt.
-void Ultrasound::echo_check()
+bool Ultrasound::echo_check()
 {
+    bool repeat = true;
     if (micros() > m_ping_timeout_us) { // Outside the time-out limit.
-        timer_stop();           // Disable timer interrupt
         m_echo_recieved = false;
-        return;
+        return false; // Disable timer interrupt.
     }
 
     if (!gpio_get(m_echo_pin)) { // Ping echo received. TODO: Wrap "!gpio_get(m_echo_pin)" in named function.
-        timer_stop();                // Disable timer interrupt
         m_ping_duration_us = (micros() - (m_ping_timeout_us - m_max_echo_time_us) - kPingTimerOverhead_us); // Calculate ping time including overhead.
         m_echo_recieved = true;
+        return false; // Disable timer interrupt.
     }
-    else
-    {
-        m_echo_recieved = false; // false because there's no ping echo yet.
-    }
+
+    m_echo_recieved = false; // false because there's no ping echo yet.
+    return true; // Continue timer interrupts.
 }
 
 // Note: This function will be called inside an interrupt.
 bool Ultrasound::interrupt_callback(repeating_timer_t *timer_info)
 {
-    s_current_sensor->echo_check();
-    return true;
+    return s_current_sensor->echo_check();;
 }
 
 bool Ultrasound::ping_trigger()
