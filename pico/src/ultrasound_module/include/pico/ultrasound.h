@@ -39,11 +39,13 @@ public:
 
 private:
     /// @return true to continue repeating, false to stop.
+    /// @note This function will be called inside an interrupt.
     bool echo_check();
 
-    bool ping_trigger(); // From NewPing
+    bool ping_trigger();
 
     /// @return true to continue repeating, false to stop.
+    /// @note This function will be called inside an interrupt.
     static bool interrupt_callback(repeating_timer_t *timer_info);
 
 private:

@@ -88,7 +88,6 @@ const char* Ultrasound::topic() const
     return m_id;
 }
 
-// Note: This function will be called inside an interrupt.
 bool Ultrasound::echo_check()
 {
     bool repeat = true;
@@ -107,7 +106,6 @@ bool Ultrasound::echo_check()
     return true; // Continue timer interrupts.
 }
 
-// Note: This function will be called inside an interrupt.
 bool Ultrasound::interrupt_callback(repeating_timer_t *timer_info)
 {
     return s_current_sensor->echo_check();;
