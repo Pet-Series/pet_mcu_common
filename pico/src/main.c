@@ -12,13 +12,13 @@
 
 const uint LED_PIN = 25;
 
-rcl_publisher_t publisher;
-std_msgs__msg__Int32 msg;
+rcl_publisher_t counter_publisher;
+std_msgs__msg__Int32 counter_msg;
 
-void publish_callback(rcl_timer_t *timer, int64_t last_call_time)
+void counter_callback(rcl_timer_t *timer, int64_t last_call_time)
 {
-    rcl_ret_t ret = rcl_publish(&publisher, &msg, NULL);
-    msg.data++;
+    rcl_ret_t ret = rcl_publish(&counter_publisher, &counter_msg, NULL);
+    counter_msg.data++;
 }
 
 void blink_callback(rcl_timer_t *timer, int64_t last_call_time)
@@ -42,7 +42,7 @@ int main()
     gpio_init(LED_PIN);
     gpio_set_dir(LED_PIN, GPIO_OUT);
 
-    rcl_timer_t publish_timer;
+    rcl_timer_t counter_timer;
     rcl_timer_t blink_timer;
     rcl_node_t node;
     rcl_allocator_t allocator;
@@ -67,16 +67,16 @@ int main()
 
     rclc_node_init_default(&node, "pico_node", "", &support);
     rclc_publisher_init_default(
-        &publisher,
+        &counter_publisher,
         &node,
         ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32),
-        "pico_publisher");
+        "pico_counter_publisher");
 
     rclc_timer_init_default(
-        &publish_timer,
+        &counter_timer,
         &support,
         RCL_MS_TO_NS(1000),
-        publish_callback);
+        counter_callback);
 
     rclc_timer_init_default(
         &blink_timer,
@@ -85,10 +85,10 @@ int main()
         blink_callback);
 
     rclc_executor_init(&executor, &support.context, 2, &allocator);
-    rclc_executor_add_timer(&executor, &publish_timer);
+    rclc_executor_add_timer(&executor, &counter_timer);
     rclc_executor_add_timer(&executor, &blink_timer);
 
-    msg.data = 0;
+    counter_msg.data = 0;
     while (true)
     {
         rclc_executor_spin_some(&executor, RCL_MS_TO_NS(100));
