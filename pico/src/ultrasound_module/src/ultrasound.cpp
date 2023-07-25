@@ -47,18 +47,17 @@ Ultrasound::Ultrasound(int trigger_pin, int echo_pin, const char* id)
     gpio_put(m_trigger_pin, GPIO_LOW);
 }
 
-void Ultrasound::start_ping()
+bool Ultrasound::start_ping()
 {
     m_echo_recieved = false;
     s_current_sensor = this;
     if (!ping_trigger()) // Trigger a ping, if it returns false, return without starting the echo timer.
     {
-        return;
+        return false;
     }
 
     /// TODO: Ensure previous timer is not running.
-    /// TODO: Check return value for status of timer.
-    add_repeating_timer_us(kEchoTimerFreq_us, Ultrasound::interrupt_callback, nullptr, &m_timer_info);
+    return add_repeating_timer_us(kEchoTimerFreq_us, Ultrasound::interrupt_callback, nullptr, &m_timer_info);
 }
 
 void Ultrasound::stop_ping()

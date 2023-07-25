@@ -25,7 +25,9 @@ public:
     Ultrasound() : Ultrasound(-1, -1, "") {}
     Ultrasound(int trigger_pin, int echo_pin, const char* id);
 
-    void start_ping();
+    /// @brief Start a new sensor ping.
+    /// @return true if ping was started successfully, false otherwise.
+    bool start_ping();
     void stop_ping();
 
     /// @return Measured distance in meters [m]
