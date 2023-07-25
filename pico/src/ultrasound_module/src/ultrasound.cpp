@@ -55,7 +55,10 @@ void Ultrasound::start_ping()
     {
         return;
     }
-    m_sonar.timer_us(ECHO_TIMER_FREQ, Ultrasound::interrupt_callback); // Set ping echo timer check every ECHO_TIMER_FREQ uS.
+
+    /// TODO: Ensure previous timer is not running.
+    /// TODO: Check return value for status of timer.
+    add_repeating_timer_us(kEchoTimerFreq_us, Ultrasound::interrupt_callback, nullptr, &m_timer_info);
 }
 
 void Ultrasound::stop_ping()
@@ -90,9 +93,10 @@ void Ultrasound::echo_check()
 }
 
 // Note: This function will be called inside an interrupt.
-void Ultrasound::interrupt_callback()
+bool Ultrasound::interrupt_callback(repeating_timer_t *timer_info)
 {
     s_current_sensor->echo_check();
+    return true;
 }
 
 bool Ultrasound::ping_trigger()

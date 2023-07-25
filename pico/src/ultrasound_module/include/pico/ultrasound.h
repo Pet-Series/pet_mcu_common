@@ -1,6 +1,8 @@
 #ifndef PET_PICO_ULTRASOUND_H
 #define PET_PICO_ULTRASOUND_H
 
+#include <pico/stdlib.h>
+
 namespace pet
 {
 namespace pico
@@ -17,6 +19,7 @@ public:
     static constexpr int kUsRoundtripCm     = 57;    // [us * 2cm^-1] Microseconds it takes sound to travel round-trip 1cm (2cm total).
     static constexpr int kTriggerWidth_us   = 12;    // [us] Width of box signal to trigger sensor to start a ping.
     static constexpr int kMaxSensorDelay_us = 5800;  // [us] Maximum time it takes for sensor to start the ping.
+    static constexpr int kEchoTimerFreq_us  = 24;    // [us] Frequency to check for a ping echo (every 24uS is about 0.4cm accuracy).
 
 public:
     Ultrasound() : Ultrasound(-1, -1, "") {}
@@ -36,7 +39,7 @@ private:
 
     bool ping_trigger(); // From NewPing
 
-    static void interrupt_callback();
+    static bool interrupt_callback(repeating_timer_t *timer_info);
 
 private:
     int m_trigger_pin;
@@ -46,6 +49,8 @@ private:
 
     int m_max_echo_time_us;
     bool m_one_pin_mode;
+
+    repeating_timer_t m_timer_info;
 
     // TODO: Protect this from concurrent use. Maybe a mutex-like variable?
     static Ultrasound* s_current_sensor;
