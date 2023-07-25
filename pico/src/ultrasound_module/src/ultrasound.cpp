@@ -103,7 +103,7 @@ bool Ultrasound::ping_trigger()
     }
 
 	gpio_put(m_trigger_pin, GPIO_HIGH);  // Set trigger pin high, this tells the sensor to send out a ping.
-	delayMicroseconds(TRIGGER_WIDTH);    // Wait long enough for the sensor to realize the trigger pin is high.
+	sleep_us(kTriggerWidth_us);          // Wait long enough for the sensor to realize the trigger pin is high.
 	gpio_put(m_trigger_pin, GPIO_LOW);   // Set trigger pin back to low.
 
 	if (m_one_pin_mode)
