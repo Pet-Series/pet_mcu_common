@@ -31,15 +31,16 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
   DESTINATION include/pet_mcu_common
 )
 
-install(TARGETS pico_ultrasound_module
-  EXPORT ${PROJECT_NAME}-export
-  ARCHIVE DESTINATION lib/${PROJECT_NAME}
-  LIBRARY DESTINATION lib/${PROJECT_NAME}
-  RUNTIME DESTINATION bin
-)
-
-install(EXPORT ${PROJECT_NAME}-export
-  FILE ${PROJECT_NAME}Targets.cmake
-  NAMESPACE pet::
-  DESTINATION share/pet_mcu_common/cmake
-)
+# TODO: Exporting 'pico_ultrasound_module' requires 'pico_stdlib' to be exported as well.
+# install(TARGETS pico_ultrasound_module
+#   EXPORT ${PROJECT_NAME}-export
+#   ARCHIVE DESTINATION lib/${PROJECT_NAME}
+#   LIBRARY DESTINATION lib/${PROJECT_NAME}
+#   RUNTIME DESTINATION bin
+# )
+#
+# install(EXPORT ${PROJECT_NAME}-export
+#   FILE ${PROJECT_NAME}Targets.cmake
+#   NAMESPACE pet::
+#   DESTINATION share/pet_mcu_common/cmake
+# )
