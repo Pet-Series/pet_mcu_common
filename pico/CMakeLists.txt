@@ -17,7 +17,7 @@ set(libmicroros_directory ${CMAKE_CURRENT_SOURCE_DIR}/microros_static_library/li
 link_directories(${libmicroros_directory})
 
 add_executable(pico_firmware
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/pico_transport.c
 )
 
