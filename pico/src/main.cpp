@@ -9,6 +9,7 @@
 
 #include "pico/stdlib.h"
 #include "pico_transport.h"
+#include "pico/ultrasound_publisher.hpp"
 
 const uint LED_PIN = 25;
 
@@ -84,9 +85,16 @@ int main()
         RCL_MS_TO_NS(500),
         blink_callback);
 
-    rclc_executor_init(&executor, &support.context, 2, &allocator);
+    rclc_executor_init(&executor, &support.context, 3, &allocator);
     rclc_executor_add_timer(&executor, &counter_timer);
     rclc_executor_add_timer(&executor, &blink_timer);
+
+    // pet::pico::UltrasoundPublisher ultrasound_publisher{26, 26, "ultrasound"};
+    // ultrasound_publisher.init(node, support, executor);
+    
+    int pin = 29;
+    pet::pico::create_ultrasound_publisher(pin, pin, "ultrasound");
+    pet::pico::init_ultrasound_publisher(node, support, executor);
 
     counter_msg.data = 0;
     while (true)

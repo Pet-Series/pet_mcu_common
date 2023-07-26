@@ -29,7 +29,7 @@ public:
 
     /// @brief Start a new sensor ping.
     /// @return true if ping was started successfully, false otherwise.
-    bool start_ping();
+    int start_ping();
     void stop_ping();
 
     /// @return Measured distance in meters [m]
@@ -43,7 +43,7 @@ private:
     /// @note This function will be called inside an interrupt.
     bool echo_check();
 
-    bool ping_trigger();
+    int ping_trigger();
 
     /// @return true to continue repeating, false to stop.
     /// @note This function will be called inside an interrupt.
@@ -53,7 +53,7 @@ private:
     int m_trigger_pin;
     int m_echo_pin;
     const char* m_id;
-    
+
     bool m_one_pin_mode;
 
     bool m_echo_recieved = false;

@@ -7,19 +7,21 @@ add_library(pet::pico_ultrasound_module ALIAS pico_ultrasound_module)
 target_sources(pico_ultrasound_module
   INTERFACE
     # $<INSTALL_INTERFACE:share/pet_mcu_common/pico/src/ultrasound_module.cpp>
+    $<INSTALL_INTERFACE:share/pet_mcu_common/pico/src/ultrasound_publisher.cpp>
     $<INSTALL_INTERFACE:share/pet_mcu_common/pico/src/ultrasound.cpp>
     # $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/ultrasound_module.cpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/ultrasound_publisher.cpp>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/ultrasound.cpp>
 )
 target_include_directories(pico_ultrasound_module
   INTERFACE
     $<INSTALL_INTERFACE:include/pet_mcu_common>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    ${libmicroros_directory}/include
 )
 target_link_libraries(pico_ultrasound_module
   INTERFACE
-    # pet::mcu_core
-    # pet::ros_lib
+    microros
     pico_stdlib
 )
 

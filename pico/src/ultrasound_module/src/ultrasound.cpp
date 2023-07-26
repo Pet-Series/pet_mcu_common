@@ -30,7 +30,7 @@ Ultrasound::Ultrasound(int trigger_pin, int echo_pin, const char* id)
     if (m_trigger_pin == m_echo_pin)
     {
         gpio_init(m_trigger_pin);
-        gpio_set_dir(m_trigger_pin, GPIO_IN);
+        gpio_set_dir(m_trigger_pin, GPIO_OUT);
         m_one_pin_mode = true;
     }
     else
@@ -44,13 +44,14 @@ Ultrasound::Ultrasound(int trigger_pin, int echo_pin, const char* id)
     gpio_put(m_trigger_pin, GPIO_LOW);
 }
 
-bool Ultrasound::start_ping()
+int Ultrasound::start_ping()
 {
     stop_ping();
     m_echo_recieved = false;
-    if (!ping_trigger()) // Trigger a ping, if it returns false, return without starting the echo timer.
+    const auto trigger_result = ping_trigger();
+    if (trigger_result != 0) // Trigger a ping, if it returns false, return without starting the echo timer.
     {
-        return false;
+        return trigger_result;
     }
 
     return add_repeating_timer_us(kEchoTimerFreq_us, Ultrasound::interrupt_callback, this, &m_timer_info);
@@ -107,7 +108,7 @@ bool Ultrasound::interrupt_callback(repeating_timer_t *timer_info)
     return current_sensor->echo_check();
 }
 
-bool Ultrasound::ping_trigger()
+int Ultrasound::ping_trigger()
 {
 	if (m_one_pin_mode)
     {
@@ -125,7 +126,7 @@ bool Ultrasound::ping_trigger()
 
     if (gpio_get(m_echo_pin))
     {
-        return false;                // Previous ping hasn't finished, abort.
+        return 3;                // Previous ping hasn't finished, abort.
     }
 
     // Maximum time we'll wait for ping to start.
@@ -134,12 +135,12 @@ bool Ultrasound::ping_trigger()
     {
         if (micros() > starting_timeout)
         {
-            return false;                                // Took too long to start, abort.
+            return 4;                                // Took too long to start, abort.
         }
     }
 
 	m_ping_timeout_us = micros() + kMaxEchoDuration_us; // Ping started, set the time-out.
-	return true;                                         // Ping started successfully.
+	return 0;                                         // Ping started successfully.
 }
 
 } // namespace pico
