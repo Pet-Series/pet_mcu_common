@@ -10,7 +10,7 @@
 #include "pico_transport.h"
 #include "pico/ultrasound_publisher.hpp"
 
-const uint LED_PIN = 25;
+constexpr uint LED_PIN = 25;
 
 void blink_callback(rcl_timer_t *timer, int64_t last_call_time)
 {
@@ -45,8 +45,7 @@ int main()
     const int timeout_ms = 1000;
     const uint8_t attempts = 120;
 
-    rcl_ret_t ret = rmw_uros_ping_agent(timeout_ms, attempts);
-
+    const rcl_ret_t ret = rmw_uros_ping_agent(timeout_ms, attempts);
     if (ret != RCL_RET_OK)
     {
         // Unreachable agent, exiting program.
