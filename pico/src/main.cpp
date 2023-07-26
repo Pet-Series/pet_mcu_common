@@ -10,6 +10,22 @@
 #include "pico_transport.h"
 #include "pico/ultrasound_publisher.hpp"
 
+namespace pet
+{
+namespace pico
+{
+
+UltrasoundPublisher& ultrasound_top_left_instance()
+{
+    static constexpr int trigger_pin = 8;
+    static constexpr int echo_pin    = 9;
+    static UltrasoundPublisher sensor{trigger_pin, echo_pin, "ultrasound/top_left"};
+    return sensor;
+}
+
+} // namespace pico
+} // namespace pet
+
 constexpr uint LED_PIN = 25;
 
 void blink_callback(rcl_timer_t *timer, int64_t last_call_time)
@@ -76,8 +92,21 @@ int main()
     // bottom left
     // int trigger_pin = 11;
     // int echo_pin    = 11;
-    pet::pico::create_ultrasound_publisher(trigger_pin, echo_pin, "ultrasound");
-    pet::pico::init_ultrasound_publisher(node, support, executor);
+    // pet::pico::create_ultrasound_publisher(trigger_pin, echo_pin, "ultrasound");
+    // pet::pico::init_ultrasound_publisher(node, support, executor);
+
+    auto &top_left = pet::pico::ultrasound_top_left_instance();
+    top_left.init(node);
+
+    rclc_timer_init_default(
+        &top_left.get_timer(),
+        &support,
+        RCL_MS_TO_NS(100),
+        [](rcl_timer_t *timer, int64_t last_call_time) {
+            return pet::pico::ultrasound_top_left_instance().timer_callback(timer, last_call_time);
+        });
+
+    rclc_executor_add_timer(&executor, &top_left.get_timer());
 
     while (true)
     {

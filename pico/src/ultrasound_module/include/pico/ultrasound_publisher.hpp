@@ -3,7 +3,6 @@
 
 #include <sensor_msgs/msg/range.h>
 
-#include <rclc/executor.h>
 #include <rclc/publisher.h>
 #include <rclc/timer.h>
 
@@ -14,17 +13,15 @@ namespace pet
 namespace pico
 {
 
-void create_ultrasound_publisher(int trigger_pin, int echo_pin, const char* id);
-
-void init_ultrasound_publisher(const rcl_node_t &node, rclc_support_t &support, rclc_executor_t &executor);
-
 class UltrasoundPublisher
 {
   public:
     UltrasoundPublisher() = default;
     UltrasoundPublisher(int trigger_pin, int echo_pin, const char* id);
 
-    void init(const rcl_node_t &node, rclc_support_t &support, rclc_executor_t &executor);
+    rcl_timer_t &get_timer();
+
+    void init(const rcl_node_t &node);
 
     void timer_callback(rcl_timer_t *timer, int64_t last_call_time);
 

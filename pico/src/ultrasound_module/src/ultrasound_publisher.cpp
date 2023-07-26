@@ -2,7 +2,6 @@
 
 #include <sensor_msgs/msg/range.h>
 
-#include <rclc/executor.h>
 #include <rclc/publisher.h>
 #include <rclc/timer.h>
 
@@ -10,48 +9,24 @@ namespace pet
 {
 namespace pico
 {
-namespace
-{
-
-UltrasoundPublisher g_ultrasound_publisher{};
-
-} // namespace
-
-void create_ultrasound_publisher(int trigger_pin, int echo_pin, const char* id)
-{
-    g_ultrasound_publisher = UltrasoundPublisher(trigger_pin, echo_pin, id);
-}
-
-void init_ultrasound_publisher(const rcl_node_t &node, rclc_support_t &support, rclc_executor_t &executor)
-{
-    g_ultrasound_publisher.init(node, support, executor);
-}
-
-void static_timer_callback(rcl_timer_t *timer, int64_t last_call_time)
-{
-    g_ultrasound_publisher.timer_callback(timer, last_call_time);
-}
 
 UltrasoundPublisher::UltrasoundPublisher(int trigger_pin, int echo_pin, const char* id)
     : m_sensor(trigger_pin, echo_pin, id)
 {
 }
 
-void UltrasoundPublisher::init(const rcl_node_t &node, rclc_support_t &support, rclc_executor_t &executor)
+rcl_timer_t &UltrasoundPublisher::get_timer()
+{
+    return m_timer;
+}
+
+void UltrasoundPublisher::init(const rcl_node_t &node)
 {
     rclc_publisher_init_default(
         &m_publisher,
         &node,
         ROSIDL_GET_MSG_TYPE_SUPPORT(sensor_msgs, msg, Range),
         m_sensor.topic());
-
-    rclc_timer_init_default(
-        &m_timer,
-        &support,
-        RCL_MS_TO_NS(100),
-        static_timer_callback); /// TODO: Can callback be non-static?
-
-    rclc_executor_add_timer(&executor, &m_timer);
 
     m_sensor.start_ping();
 }
