@@ -34,6 +34,25 @@ void register_top_left_ultrasound(const rcl_node_t &node, rclc_support_t &suppor
     rclc_executor_add_timer(&executor, &sensor.get_timer());
 }
 
+void register_top_right_ultrasound(const rcl_node_t &node, rclc_support_t &support, rclc_executor_t &executor)
+{
+    static constexpr int kTriggerPin = 22;
+    static constexpr int kEchoPin    = 26;
+    static UltrasoundPublisher sensor{kTriggerPin, kEchoPin, "ultrasound/top_right"};
+
+    sensor.init(node);
+
+    rclc_timer_init_default(
+        &sensor.get_timer(),
+        &support,
+        RCL_MS_TO_NS(100),
+        [](rcl_timer_t *timer, int64_t last_call_time) {
+            return sensor.timer_callback(timer, last_call_time);
+        });
+
+    rclc_executor_add_timer(&executor, &sensor.get_timer());
+}
+
 } // namespace pico
 } // namespace pet
 
@@ -93,6 +112,7 @@ int main()
     rclc_executor_add_timer(&executor, &blink_timer);
 
     pet::pico::register_top_left_ultrasound(node, support, executor);
+    pet::pico::register_top_right_ultrasound(node, support, executor);
 
     while (true)
     {
