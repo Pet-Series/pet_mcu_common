@@ -92,8 +92,18 @@ int main()
     // pet::pico::UltrasoundPublisher ultrasound_publisher{26, 26, "ultrasound"};
     // ultrasound_publisher.init(node, support, executor);
     
-    int pin = 29;
-    pet::pico::create_ultrasound_publisher(pin, pin, "ultrasound");
+    // top right
+    // int trigger_pin = 22;
+    // int echo_pin    = 26;
+
+    // top left
+    int trigger_pin = 8;
+    int echo_pin    = 9;
+    
+    // bottom left
+    // int trigger_pin = 11;
+    // int echo_pin    = 11;
+    pet::pico::create_ultrasound_publisher(trigger_pin, echo_pin, "ultrasound");
     pet::pico::init_ultrasound_publisher(node, support, executor);
 
     counter_msg.data = 0;

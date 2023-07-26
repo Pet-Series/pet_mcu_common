@@ -54,8 +54,6 @@ private:
     int m_echo_pin;
     const char* m_id;
 
-    bool m_one_pin_mode;
-
     bool m_echo_recieved = false;
     int m_ping_duration_us;
     int m_ping_timeout_us;

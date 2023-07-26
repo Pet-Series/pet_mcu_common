@@ -27,20 +27,12 @@ Ultrasound::Ultrasound(int trigger_pin, int echo_pin, const char* id)
     , m_echo_pin(echo_pin)
     , m_id(id)
 {
-    if (m_trigger_pin == m_echo_pin)
-    {
-        gpio_init(m_trigger_pin);
-        gpio_set_dir(m_trigger_pin, GPIO_OUT);
-        m_one_pin_mode = true;
-    }
-    else
-    {
-        gpio_init(m_trigger_pin);
-        gpio_set_dir(m_trigger_pin, GPIO_OUT);
-        gpio_init(m_echo_pin);
-        gpio_set_dir(m_echo_pin, GPIO_IN);
-        m_one_pin_mode = false;
-    }
+    gpio_init(m_trigger_pin);
+    gpio_set_dir(m_trigger_pin, GPIO_OUT);
+
+    gpio_init(m_echo_pin);
+    gpio_set_dir(m_echo_pin, GPIO_IN);
+
     gpio_put(m_trigger_pin, GPIO_LOW);
 }
 
@@ -110,19 +102,9 @@ bool Ultrasound::interrupt_callback(repeating_timer_t *timer_info)
 
 int Ultrasound::ping_trigger()
 {
-	if (m_one_pin_mode)
-    {
-        gpio_set_dir(m_trigger_pin, GPIO_OUT);  // Set trigger pin to output.
-    }
-
 	gpio_put(m_trigger_pin, GPIO_HIGH);  // Set trigger pin high, this tells the sensor to send out a ping.
 	sleep_us(kTriggerWidth_us);          // Wait long enough for the sensor to realize the trigger pin is high.
 	gpio_put(m_trigger_pin, GPIO_LOW);   // Set trigger pin back to low.
-
-	if (m_one_pin_mode)
-    {
-        gpio_set_dir(m_trigger_pin, GPIO_IN); // Set trigger pin to input (this is technically setting the echo pin to input as both are tied to the same pin).
-    }
 
     if (gpio_get(m_echo_pin))
     {
