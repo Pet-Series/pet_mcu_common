@@ -42,7 +42,7 @@ void UltrasoundPublisher::timer_callback(rcl_timer_t *timer, int64_t last_call_t
 
     const auto result = rcl_publish(&m_publisher, &m_msg, nullptr);
 
-    // m_sensor.start_ping();
+    m_sensor.start_ping();
 }
 
 } // namespace pico
