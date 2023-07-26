@@ -36,14 +36,13 @@ Ultrasound::Ultrasound(int trigger_pin, int echo_pin, const char* id)
     gpio_put(m_trigger_pin, GPIO_LOW);
 }
 
-int Ultrasound::start_ping()
+bool Ultrasound::start_ping()
 {
     stop_ping();
     m_echo_recieved = false;
-    const auto trigger_result = ping_trigger();
-    if (trigger_result != 0) // Trigger a ping, if it returns false, return without starting the echo timer.
+    if (!ping_trigger()) // Trigger a ping, if it returns false, return without starting the echo timer.
     {
-        return trigger_result;
+        return false;
     }
 
     return add_repeating_timer_us(kEchoTimerFreq_us, Ultrasound::interrupt_callback, this, &m_timer_info);
@@ -100,7 +99,7 @@ bool Ultrasound::interrupt_callback(repeating_timer_t *timer_info)
     return current_sensor->echo_check();
 }
 
-int Ultrasound::ping_trigger()
+bool Ultrasound::ping_trigger()
 {
 	gpio_put(m_trigger_pin, GPIO_HIGH);  // Set trigger pin high, this tells the sensor to send out a ping.
 	sleep_us(kTriggerWidth_us);          // Wait long enough for the sensor to realize the trigger pin is high.
@@ -108,7 +107,7 @@ int Ultrasound::ping_trigger()
 
     if (gpio_get(m_echo_pin))
     {
-        return 3;                // Previous ping hasn't finished, abort.
+        return false;                // Previous ping hasn't finished, abort.
     }
 
     // Maximum time we'll wait for ping to start.
@@ -117,12 +116,12 @@ int Ultrasound::ping_trigger()
     {
         if (micros() > starting_timeout)
         {
-            return 4;                                // Took too long to start, abort.
+            return false;                                // Took too long to start, abort.
         }
     }
 
 	m_ping_timeout_us = micros() + kMaxEchoDuration_us; // Ping started, set the time-out.
-	return 0;                                         // Ping started successfully.
+	return true;                                        // Ping started successfully.
 }
 
 } // namespace pico

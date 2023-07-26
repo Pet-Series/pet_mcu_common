@@ -65,9 +65,6 @@ void UltrasoundPublisher::timer_callback(rcl_timer_t *timer, int64_t last_call_t
     // m_msg.header.frame_id = m_sensor.frame_id();
     m_msg.range           = m_sensor.get_distance();
 
-    m_msg.header.stamp.sec++;
-    m_msg.header.stamp.nanosec = m_sensor.start_ping();
-
     const auto result = rcl_publish(&m_publisher, &m_msg, nullptr);
 
     // m_sensor.start_ping();
