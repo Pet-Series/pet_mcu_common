@@ -15,12 +15,23 @@ namespace pet
 namespace pico
 {
 
-UltrasoundPublisher& ultrasound_top_left_instance()
+void register_top_left_ultrasound(const rcl_node_t &node, rclc_support_t &support, rclc_executor_t &executor)
 {
-    static constexpr int trigger_pin = 8;
-    static constexpr int echo_pin    = 9;
-    static UltrasoundPublisher sensor{trigger_pin, echo_pin, "ultrasound/top_left"};
-    return sensor;
+    static constexpr int kTriggerPin = 8;
+    static constexpr int kEchoPin    = 9;
+    static UltrasoundPublisher sensor{kTriggerPin, kEchoPin, "ultrasound/top_left"};
+
+    sensor.init(node);
+
+    rclc_timer_init_default(
+        &sensor.get_timer(),
+        &support,
+        RCL_MS_TO_NS(100),
+        [](rcl_timer_t *timer, int64_t last_call_time) {
+            return sensor.timer_callback(timer, last_call_time);
+        });
+
+    rclc_executor_add_timer(&executor, &sensor.get_timer());
 }
 
 } // namespace pico
@@ -80,33 +91,8 @@ int main()
 
     rclc_executor_init(&executor, &support.context, 3, &allocator);
     rclc_executor_add_timer(&executor, &blink_timer);
-    
-    // top right
-    // int trigger_pin = 22;
-    // int echo_pin    = 26;
 
-    // top left
-    int trigger_pin = 8;
-    int echo_pin    = 9;
-    
-    // bottom left
-    // int trigger_pin = 11;
-    // int echo_pin    = 11;
-    // pet::pico::create_ultrasound_publisher(trigger_pin, echo_pin, "ultrasound");
-    // pet::pico::init_ultrasound_publisher(node, support, executor);
-
-    auto &top_left = pet::pico::ultrasound_top_left_instance();
-    top_left.init(node);
-
-    rclc_timer_init_default(
-        &top_left.get_timer(),
-        &support,
-        RCL_MS_TO_NS(100),
-        [](rcl_timer_t *timer, int64_t last_call_time) {
-            return pet::pico::ultrasound_top_left_instance().timer_callback(timer, last_call_time);
-        });
-
-    rclc_executor_add_timer(&executor, &top_left.get_timer());
+    pet::pico::register_top_left_ultrasound(node, support, executor);
 
     while (true)
     {
