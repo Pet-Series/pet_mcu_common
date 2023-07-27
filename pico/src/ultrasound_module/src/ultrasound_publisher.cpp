@@ -1,5 +1,6 @@
 #include "pico/ultrasound_publisher.hpp"
 
+#include <cmath>
 #include <cstring>
 
 #include <sensor_msgs/msg/range.h>
@@ -13,6 +14,16 @@ namespace pet
 namespace pico
 {
 
+namespace
+{
+
+constexpr float deg2rad(float degrees)
+{
+    return degrees * M_PI / 180.0f;
+}
+
+} // namespace
+
 UltrasoundPublisher::UltrasoundPublisher(int trigger_pin, int echo_pin, const char* id)
     : m_sensor(trigger_pin, echo_pin, id)
 {
@@ -22,6 +33,11 @@ UltrasoundPublisher::UltrasoundPublisher(int trigger_pin, int echo_pin, const ch
     m_msg.header.frame_id.data     = m_frame_id;
     m_msg.header.frame_id.size     = std::strlen(m_frame_id);
     m_msg.header.frame_id.capacity = kFrameIdCapacity;
+    
+    m_msg.radiation_type = sensor_msgs__msg__Range__ULTRASOUND;
+    m_msg.field_of_view  = deg2rad(50);
+    m_msg.min_range      = Ultrasound::kMinDistance_cm / 100.0f;
+    m_msg.max_range      = Ultrasound::kMaxDistance_cm / 100.0f;
 }
 
 rcl_timer_t &UltrasoundPublisher::get_timer()
