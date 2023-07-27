@@ -2,6 +2,7 @@
 
 #include <sensor_msgs/msg/range.h>
 
+#include <rcl/time.h>
 #include <rclc/publisher.h>
 #include <rclc/timer.h>
 
@@ -28,6 +29,9 @@ void UltrasoundPublisher::init(const rcl_node_t &node)
         ROSIDL_GET_MSG_TYPE_SUPPORT(sensor_msgs, msg, Range),
         m_sensor.topic());
 
+    rcl_allocator_t allocator = rcl_get_default_allocator();
+    rcl_ros_clock_init(&m_clock, &allocator);
+
     m_sensor.start_ping();
 }
 
@@ -35,8 +39,13 @@ void UltrasoundPublisher::timer_callback(rcl_timer_t *timer, int64_t last_call_t
 {
     m_sensor.stop_ping();
 
-    /// TODO: Set header timestamp and frame_id.
-    // m_msg.header.stamp    = Time.now();
+    int64_t current_time_ns;
+    rcl_clock_get_now(&m_clock, &current_time_ns);
+
+    m_msg.header.stamp.sec     = current_time_ns / 1'000'000'000;
+    m_msg.header.stamp.nanosec = current_time_ns % 1'000'000'000;
+
+    /// TODO: Set frame_id.
     // m_msg.header.frame_id = m_sensor.frame_id();
     m_msg.range           = m_sensor.get_distance();
 

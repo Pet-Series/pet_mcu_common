@@ -3,6 +3,7 @@
 
 #include <sensor_msgs/msg/range.h>
 
+#include <rcl/time.h>
 #include <rclc/publisher.h>
 #include <rclc/timer.h>
 
@@ -30,6 +31,7 @@ class UltrasoundPublisher
 
     rcl_publisher_t         m_publisher{};
     rcl_timer_t             m_timer{};
+    rcl_clock_t             m_clock{};
     sensor_msgs__msg__Range m_msg{};
 };
 
