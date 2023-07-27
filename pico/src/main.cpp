@@ -9,6 +9,7 @@
 #include "pico/stdlib.h"
 #include "pico_transport.h"
 #include "pico/ultrasound_publisher.hpp"
+#include "pico/ultrasound_module.h"
 
 namespace pet
 {
@@ -51,6 +52,32 @@ void register_top_right_ultrasound(const rcl_node_t &node, rclc_support_t &suppo
         });
 
     rclc_executor_add_timer(&executor, &sensor.get_timer());
+}
+
+void register_left_right_ultrasound(const rcl_node_t &node, rclc_support_t &support, rclc_executor_t &executor)
+{
+    static constexpr int kTriggerPinLeft  = 8;
+    static constexpr int kEchoPinLeft     = 9;
+    static constexpr int kTriggerPinRight = 22;
+    static constexpr int kEchoPinRight    = 26;
+
+    static constexpr int         kTriggerPins[] = {kTriggerPinLeft, kTriggerPinRight};
+    static constexpr int         kEchoPins[]    = {kEchoPinLeft, kEchoPinRight};
+    static constexpr const char* kSensorIds[]   = {"ultrasound/top_left", "ultrasound/top_right"};
+
+    static UltrasoundModule<2> ultrasound_module{kTriggerPins, kEchoPins, kSensorIds};
+
+    ultrasound_module.init(node);
+
+    rclc_timer_init_default(
+        &ultrasound_module.get_timer(),
+        &support,
+        RCL_MS_TO_NS(100),
+        [](rcl_timer_t *timer, int64_t last_call_time) {
+            return ultrasound_module.timer_callback(timer, last_call_time);
+        });
+
+    rclc_executor_add_timer(&executor, &ultrasound_module.get_timer());
 }
 
 } // namespace pico
@@ -111,8 +138,9 @@ int main()
     rclc_executor_init(&executor, &support.context, 3, &allocator);
     rclc_executor_add_timer(&executor, &blink_timer);
 
-    pet::pico::register_top_left_ultrasound(node, support, executor);
-    pet::pico::register_top_right_ultrasound(node, support, executor);
+    // pet::pico::register_top_left_ultrasound(node, support, executor);
+    // pet::pico::register_top_right_ultrasound(node, support, executor);
+    pet::pico::register_left_right_ultrasound(node, support, executor);
 
     while (true)
     {
