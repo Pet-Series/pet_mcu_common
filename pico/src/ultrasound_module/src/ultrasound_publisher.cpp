@@ -1,5 +1,7 @@
 #include "pico/ultrasound_publisher.hpp"
 
+#include <cstring>
+
 #include <sensor_msgs/msg/range.h>
 
 #include <rcl/time.h>
@@ -14,6 +16,12 @@ namespace pico
 UltrasoundPublisher::UltrasoundPublisher(int trigger_pin, int echo_pin, const char* id)
     : m_sensor(trigger_pin, echo_pin, id)
 {
+    std::strncpy(m_frame_id, id, kFrameIdCapacity); 
+    m_frame_id[kFrameIdCapacity-1] = '\0'; // Ensure frame id is always null terminated.
+
+    m_msg.header.frame_id.data     = m_frame_id;
+    m_msg.header.frame_id.size     = std::strlen(m_frame_id);
+    m_msg.header.frame_id.capacity = kFrameIdCapacity;
 }
 
 rcl_timer_t &UltrasoundPublisher::get_timer()
@@ -44,10 +52,7 @@ void UltrasoundPublisher::timer_callback(rcl_timer_t *timer, int64_t last_call_t
 
     m_msg.header.stamp.sec     = current_time_ns / 1'000'000'000;
     m_msg.header.stamp.nanosec = current_time_ns % 1'000'000'000;
-
-    /// TODO: Set frame_id.
-    // m_msg.header.frame_id = m_sensor.frame_id();
-    m_msg.range           = m_sensor.get_distance();
+    m_msg.range                = m_sensor.get_distance();
 
     const auto result = rcl_publish(&m_publisher, &m_msg, nullptr);
 
