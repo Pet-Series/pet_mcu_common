@@ -1,5 +1,4 @@
-#ifndef _PET_MCU_COMMON_PICO_PICO_TRANSPORT
-#define _PET_MCU_COMMON_PICO_PICO_TRANSPORT
+#pragma once
 
 #ifdef __cplusplus
 extern "C"
@@ -19,5 +18,3 @@ size_t pico_serial_transport_read(struct uxrCustomTransport* transport, uint8_t*
 #ifdef __cplusplus
 }
 #endif
-
-#endif //_PET_MCU_COMMON_PICO_PICO_TRANSPORT

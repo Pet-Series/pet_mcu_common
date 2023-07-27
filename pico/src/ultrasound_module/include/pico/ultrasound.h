@@ -1,5 +1,4 @@
-#ifndef PET_PICO_ULTRASOUND_H
-#define PET_PICO_ULTRASOUND_H
+#pragma once
 
 #include <pico/stdlib.h>
 
@@ -63,5 +62,3 @@ private:
 
 } // namespace pico
 } // namespace pet
-
-#endif // PET_PICO_ULTRASOUND_H

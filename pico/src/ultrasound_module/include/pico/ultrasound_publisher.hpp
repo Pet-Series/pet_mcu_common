@@ -1,5 +1,4 @@
-#ifndef PET_PICO_ULTRASOUND_PUBLISHER_H
-#define PET_PICO_ULTRASOUND_PUBLISHER_H
+#pragma once
 
 #include <sensor_msgs/msg/range.h>
 
@@ -42,5 +41,3 @@ class UltrasoundPublisher
 
 } // namespace pico
 } // namespace pet
-
-#endif // PET_PICO_ULTRASOUND_PUBLISHER_H

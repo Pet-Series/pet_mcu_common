@@ -1,5 +1,4 @@
-#ifndef PET_ULTRASOUND_MODULE_H
-#define PET_ULTRASOUND_MODULE_H
+#pragma once
 
 #include <ros/time.h>
 #include <ros/duration.h>
@@ -87,5 +86,3 @@ ros::Time UltrasoundModule<kSensorCount>::callback(const TimerEvent& event)
 }
 
 } // namespace pet
-
-#endif // PET_ULTRASOUND_MODULE_H
