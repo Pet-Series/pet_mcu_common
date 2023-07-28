@@ -10,11 +10,6 @@ namespace pico
 namespace
 {
 
-constexpr float centimeter_to_meter(float centimeter)
-{
-    return centimeter / 100.0f;
-}
-
 auto micros()
 {
     return to_us_since_boot(get_absolute_time());
@@ -59,7 +54,7 @@ void Ultrasound::stop_ping()
 float Ultrasound::get_distance() const
 {
     if (m_echo_recieved) {
-        return centimeter_to_meter(m_ping_duration_us / static_cast<float>(kUsRoundtripCm));
+        return convert_to_distance(m_ping_duration_us);
     } else {
         return -1.0f;
     }
@@ -122,6 +117,11 @@ bool Ultrasound::ping_trigger()
 
 	m_ping_timeout_us = micros() + kMaxEchoDuration_us; // Ping started, set the time-out.
 	return true;                                        // Ping started successfully.
+}
+
+float Ultrasound::convert_to_distance(int roundtrip_duration_us)
+{
+    return roundtrip_duration_us / 2 * kSpeedOfSound_mps / 1'000'000;
 }
 
 } // namespace pico

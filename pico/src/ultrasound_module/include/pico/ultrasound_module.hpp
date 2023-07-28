@@ -73,8 +73,8 @@ UltrasoundModule<kSensorCount>::UltrasoundModule(const std::array<int, kSensorCo
         // Set sensor meta data.
         m_messages[i].radiation_type = sensor_msgs__msg__Range__ULTRASOUND;
         m_messages[i].field_of_view  = deg2rad(50);
-        m_messages[i].min_range      = Ultrasound::kMinDistance_cm / 100.0f;
-        m_messages[i].max_range      = Ultrasound::kMaxDistance_cm / 100.0f;
+        m_messages[i].min_range      = Ultrasound::kMinDistance_m;
+        m_messages[i].max_range      = Ultrasound::kMaxDistance_m;
     }
 }
 
