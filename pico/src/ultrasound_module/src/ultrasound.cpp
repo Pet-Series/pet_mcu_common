@@ -1,4 +1,4 @@
-#include "pico/ultrasound.h"
+#include "pico/ultrasound.hpp"
 
 #include <pico/stdlib.h>
 

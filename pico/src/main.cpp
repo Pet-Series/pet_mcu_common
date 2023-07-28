@@ -10,7 +10,7 @@
 #include "pico/stdlib.h"
 #include "pico_transport.h"
 #include "pico/ultrasound_publisher.hpp"
-#include "pico/ultrasound_module.h"
+#include "pico/ultrasound_module.hpp"
 
 namespace pet
 {

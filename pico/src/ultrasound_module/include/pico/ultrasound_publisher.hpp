@@ -6,7 +6,7 @@
 #include <rclc/publisher.h>
 #include <rclc/timer.h>
 
-#include "pico/ultrasound.h"
+#include "pico/ultrasound.hpp"
 
 namespace pet
 {

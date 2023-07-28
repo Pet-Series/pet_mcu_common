@@ -1,4 +1,4 @@
-#include "pico/ultrasound_module.h"
+#include "pico/ultrasound_module.hpp"
 
 namespace pet
 {
