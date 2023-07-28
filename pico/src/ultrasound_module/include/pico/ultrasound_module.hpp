@@ -26,7 +26,7 @@ template<int kSensorCount>
 class UltrasoundModule
 {
 private:
-    static constexpr int kFrequency_hz = 10;
+    static constexpr uint64_t kTimerPeriod_ms = 100;
 
 public:
     UltrasoundModule(const std::array<int, kSensorCount>         &trigger_pins,
@@ -38,6 +38,8 @@ public:
     void timer_callback(rcl_timer_t *timer, int64_t last_call_time);
 
     rcl_timer_t &get_timer();
+
+    uint64_t get_timer_period_ms();
 
   private:
     std::array<Ultrasound, kSensorCount>              m_sensors;
@@ -121,6 +123,12 @@ template<int kSensorCount>
 rcl_timer_t &UltrasoundModule<kSensorCount>::get_timer()
 {
     return m_timer;
+}
+
+template<int kSensorCount>
+uint64_t UltrasoundModule<kSensorCount>::get_timer_period_ms()
+{
+    return kTimerPeriod_ms;
 }
 
 } // namespace pico

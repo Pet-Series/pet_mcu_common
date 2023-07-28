@@ -34,7 +34,7 @@ void register_left_right_ultrasound(const rcl_node_t &node, rclc_support_t &supp
     rclc_timer_init_default(
         &ultrasound_module.get_timer(),
         &support,
-        RCL_MS_TO_NS(100),
+        RCL_MS_TO_NS(ultrasound_module.get_timer_period_ms()),
         [](rcl_timer_t *timer, int64_t last_call_time) {
             return ultrasound_module.timer_callback(timer, last_call_time);
         });
