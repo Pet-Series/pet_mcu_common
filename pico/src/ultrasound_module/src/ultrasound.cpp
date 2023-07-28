@@ -72,7 +72,6 @@ const char* Ultrasound::topic() const
 
 bool Ultrasound::echo_check()
 {
-    bool repeat = true;
     if (micros() > m_ping_timeout_us) // Outside the time-out limit.
     {
         m_echo_recieved = false;
