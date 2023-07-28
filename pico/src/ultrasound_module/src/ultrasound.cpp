@@ -73,13 +73,15 @@ const char* Ultrasound::topic() const
 bool Ultrasound::echo_check()
 {
     bool repeat = true;
-    if (micros() > m_ping_timeout_us) { // Outside the time-out limit.
+    if (micros() > m_ping_timeout_us) // Outside the time-out limit.
+    {
         m_echo_recieved = false;
         return false; // Disable timer interrupt.
     }
 
-    if (!gpio_get(m_echo_pin)) { // Ping echo received. TODO: Wrap "!gpio_get(m_echo_pin)" in named function.
-        m_ping_duration_us = (micros() - (m_ping_timeout_us - kMaxEchoDuration_us) - kPingTimerOverhead_us); // Calculate ping time including overhead.
+    if (!gpio_get(m_echo_pin)) // Ping echo received.
+    {
+        m_ping_duration_us = (micros() - (m_ping_timeout_us - kMaxRoundtripDuration_us) - kPingTimerOverhead_us); // Calculate ping time including overhead.
         m_echo_recieved = true;
         return false; // Disable timer interrupt.
     }
@@ -102,21 +104,23 @@ bool Ultrasound::ping_trigger()
 
     if (gpio_get(m_echo_pin))
     {
-        return false;                // Previous ping hasn't finished, abort.
+        return false; // Previous ping hasn't finished, abort.
     }
 
+    /// TODO: Remove or minimise blocking of execution.
     // Maximum time we'll wait for ping to start.
-    const uint64_t starting_timeout = micros() + kMaxEchoDuration_us + kMaxSensorDelay_us;
+    const uint64_t starting_timeout = micros() + kMaxRoundtripDuration_us + kMaxSensorDelay_us;
     while (!gpio_get(m_echo_pin))
     {
         if (micros() > starting_timeout)
         {
-            return false;                                // Took too long to start, abort.
+            return false; // Took too long to start, abort.
         }
     }
 
-	m_ping_timeout_us = micros() + kMaxEchoDuration_us; // Ping started, set the time-out.
-	return true;                                        // Ping started successfully.
+    // Ping started successfully, set the time-out.
+	m_ping_timeout_us = micros() + kMaxRoundtripDuration_us;
+	return true;
 }
 
 float Ultrasound::convert_to_distance(int roundtrip_duration_us)
