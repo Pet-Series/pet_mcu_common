@@ -26,8 +26,8 @@ private:
     static constexpr int   kPingTimerOverhead_us    = 13;     // [us] Overhead subtracted from measured flight time of ping.
 
 public:
-    Ultrasound() : Ultrasound(-1, -1, "") {}
-    Ultrasound(int trigger_pin, int echo_pin, const char* id);
+    Ultrasound() : Ultrasound(-1, -1) {}
+    Ultrasound(int trigger_pin, int echo_pin);
 
     /// @brief Start a new sensor ping.
     /// @return true if ping was started successfully, false otherwise.
@@ -36,9 +36,6 @@ public:
 
     /// @return Measured distance in meters [m]
     float get_distance() const;
-
-    const char* frame_id() const;
-    const char* topic() const;
 
 private:
     /// @return true to continue repeating, false to stop.
@@ -59,7 +56,6 @@ private:
 private:
     int m_trigger_pin;
     int m_echo_pin;
-    const char* m_id;
 
     bool m_echo_recieved = false;
     int m_ping_duration_us;

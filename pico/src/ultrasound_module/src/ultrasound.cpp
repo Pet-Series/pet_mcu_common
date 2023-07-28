@@ -17,10 +17,9 @@ auto micros()
 
 }
 
-Ultrasound::Ultrasound(int trigger_pin, int echo_pin, const char* id)
+Ultrasound::Ultrasound(int trigger_pin, int echo_pin)
     : m_trigger_pin(trigger_pin)
     , m_echo_pin(echo_pin)
-    , m_id(id)
 {
     gpio_init(m_trigger_pin);
     gpio_set_dir(m_trigger_pin, GPIO_OUT);
@@ -58,16 +57,6 @@ float Ultrasound::get_distance() const
     } else {
         return -1.0f;
     }
-}
-
-const char* Ultrasound::frame_id() const
-{
-    return m_id;
-}
-
-const char* Ultrasound::topic() const
-{
-    return m_id;
 }
 
 bool Ultrasound::echo_check()
