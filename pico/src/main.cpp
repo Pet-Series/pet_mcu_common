@@ -1,3 +1,4 @@
+#include <array>
 #include <stdio.h>
 
 #include <rcl/rcl.h>
@@ -61,11 +62,11 @@ void register_left_right_ultrasound(const rcl_node_t &node, rclc_support_t &supp
     static constexpr int kTriggerPinRight = 22;
     static constexpr int kEchoPinRight    = 26;
 
-    static constexpr int         kTriggerPins[] = {kTriggerPinLeft, kTriggerPinRight};
-    static constexpr int         kEchoPins[]    = {kEchoPinLeft, kEchoPinRight};
-    static constexpr const char* kSensorIds[]   = {"ultrasound/top_left", "ultrasound/top_right"};
+    static constexpr auto kTriggerPins = std::array{kTriggerPinLeft, kTriggerPinRight};
+    static constexpr auto kEchoPins    = std::array{kEchoPinLeft, kEchoPinRight};
+    static constexpr auto kSensorIds   = std::array{"ultrasound/top_left", "ultrasound/top_right"};
 
-    static UltrasoundModule<2> ultrasound_module{kTriggerPins, kEchoPins, kSensorIds};
+    static UltrasoundModule<2> ultrasound_module(kTriggerPins, kEchoPins, kSensorIds);
 
     ultrasound_module.init(node);
 

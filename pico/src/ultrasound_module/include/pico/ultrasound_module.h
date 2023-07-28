@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <cstring>
 
 #include <sensor_msgs/msg/range.h>
@@ -29,9 +30,9 @@ private:
     static constexpr size_t kFrameIdCapacity = 40;
 
 public:
-    UltrasoundModule(const int trigger_pins[kSensorCount], 
-                     const int echo_pins[kSensorCount], 
-                     const char* const sensor_ids[kSensorCount]);
+    UltrasoundModule(const std::array<int, kSensorCount>         &trigger_pins,
+                     const std::array<int, kSensorCount>         &echo_pins,
+                     const std::array<const char*, kSensorCount> &sensor_ids);
 
     void init(const rcl_node_t &node);
 
@@ -40,9 +41,9 @@ public:
     rcl_timer_t &get_timer();
 
   private:
-    Ultrasound              m_sensors[kSensorCount];
-    rcl_publisher_t         m_publishers[kSensorCount];
-    sensor_msgs__msg__Range m_messages[kSensorCount];
+    std::array<Ultrasound, kSensorCount>              m_sensors;
+    std::array<rcl_publisher_t, kSensorCount>         m_publishers;
+    std::array<sensor_msgs__msg__Range, kSensorCount> m_messages;
 
     rcl_timer_t m_timer{};
     rcl_clock_t m_clock{};
@@ -51,9 +52,9 @@ public:
 };
 
 template<int kSensorCount>
-UltrasoundModule<kSensorCount>::UltrasoundModule(const int trigger_pins[kSensorCount], 
-                                                 const int echo_pins[kSensorCount], 
-                                                 const char* const sensor_ids[kSensorCount])
+UltrasoundModule<kSensorCount>::UltrasoundModule(const std::array<int, kSensorCount>         &trigger_pins,
+                                                 const std::array<int, kSensorCount>         &echo_pins,
+                                                 const std::array<const char*, kSensorCount> &sensor_ids)
 {
     for (int i = 0; i < kSensorCount; ++i)
     {
