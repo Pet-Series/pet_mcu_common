@@ -42,6 +42,9 @@ public:
     uint64_t get_timer_period_ms();
 
   private:
+    static void set_frame_id(std_msgs__msg__Header &header, const char *frame_id);
+
+  private:
     std::array<Ultrasound, kSensorCount>              m_sensors;
     std::array<rcl_publisher_t, kSensorCount>         m_publishers;
     std::array<sensor_msgs__msg__Range, kSensorCount> m_messages;
@@ -63,15 +66,7 @@ UltrasoundModule<kSensorCount>::UltrasoundModule(const std::array<int, kSensorCo
     {
         m_sensors[i] = Ultrasound{trigger_pins[i], echo_pins[i]};
 
-        // std::strlen does not count the null character, so we add one to the length.
-        const size_t id_length = std::strlen(sensor_ids[i]) + 1;
-        m_messages[i].header.frame_id.data     = new char[id_length];
-        m_messages[i].header.frame_id.size     = id_length;
-        m_messages[i].header.frame_id.capacity = id_length;
-
-        // Copy frame id and set the null character.
-        std::strcpy(m_messages[i].header.frame_id.data, sensor_ids[i]); 
-        m_messages[i].header.frame_id.data[id_length-1] = '\0';
+        set_frame_id(m_messages[i].header, sensor_ids[i]);
 
         // Set sensor meta data.
         m_messages[i].radiation_type = sensor_msgs__msg__Range__ULTRASOUND;
@@ -129,6 +124,20 @@ template<int kSensorCount>
 uint64_t UltrasoundModule<kSensorCount>::get_timer_period_ms()
 {
     return kTimerPeriod_ms;
+}
+
+template<int kSensorCount>
+void UltrasoundModule<kSensorCount>::set_frame_id(std_msgs__msg__Header &header, const char *frame_id)
+{
+    // std::strlen does not count the null character, so we add one to the length.
+    const size_t id_length = std::strlen(frame_id) + 1;
+    header.frame_id.data     = new char[id_length]; // Only allocated once, and never deallocated.
+    header.frame_id.size     = id_length;
+    header.frame_id.capacity = id_length;
+
+    // Copy frame id and set the null character.
+    std::strcpy(header.frame_id.data, frame_id); 
+    header.frame_id.data[id_length-1] = '\0';
 }
 
 } // namespace pico
