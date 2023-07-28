@@ -91,7 +91,7 @@ void UltrasoundModule<kSensorCount>::init(const rcl_node_t &node)
     }
 
     rcl_allocator_t allocator = rcl_get_default_allocator();
-    rcl_ros_clock_init(&m_clock, &allocator);
+    const auto clock_result = rcl_ros_clock_init(&m_clock, &allocator);
 
     m_sensors[m_current_sensor].start_ping();
 }
@@ -104,13 +104,13 @@ void UltrasoundModule<kSensorCount>::timer_callback(rcl_timer_t *timer, int64_t 
     current_sensor.stop_ping();
 
     int64_t current_time_ns;
-    rcl_clock_get_now(&m_clock, &current_time_ns);
+    const auto clock_result = rcl_clock_get_now(&m_clock, &current_time_ns);
 
     m_messages[m_current_sensor].header.stamp.sec     = current_time_ns / 1'000'000'000;
     m_messages[m_current_sensor].header.stamp.nanosec = current_time_ns % 1'000'000'000;
     m_messages[m_current_sensor].range                = current_sensor.get_distance();
 
-    const auto result = rcl_publish(&m_publishers[m_current_sensor], &m_messages[m_current_sensor], nullptr);
+    const auto publish_result = rcl_publish(&m_publishers[m_current_sensor], &m_messages[m_current_sensor], nullptr);
 
     m_current_sensor = (m_current_sensor + 1) % kSensorCount;
     m_sensors[m_current_sensor].start_ping();
