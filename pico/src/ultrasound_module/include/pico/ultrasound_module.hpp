@@ -43,6 +43,7 @@ public:
 
   private:
     static void set_frame_id(std_msgs__msg__Header &header, const char *frame_id);
+    static void set_meta_data(sensor_msgs__msg__Range &message);
 
   private:
     std::array<Ultrasound, kSensorCount>              m_sensors;
@@ -67,12 +68,7 @@ UltrasoundModule<kSensorCount>::UltrasoundModule(const std::array<int, kSensorCo
         m_sensors[i] = Ultrasound{trigger_pins[i], echo_pins[i]};
 
         set_frame_id(m_messages[i].header, sensor_ids[i]);
-
-        // Set sensor meta data.
-        m_messages[i].radiation_type = sensor_msgs__msg__Range__ULTRASOUND;
-        m_messages[i].field_of_view  = deg2rad(50);
-        m_messages[i].min_range      = Ultrasound::kMinDistance_m;
-        m_messages[i].max_range      = Ultrasound::kMaxDistance_m;
+        set_meta_data(m_messages[i]);
     }
 }
 
@@ -138,6 +134,15 @@ void UltrasoundModule<kSensorCount>::set_frame_id(std_msgs__msg__Header &header,
     // Copy frame id and set the null character.
     std::strcpy(header.frame_id.data, frame_id); 
     header.frame_id.data[id_length-1] = '\0';
+}
+
+template<int kSensorCount>
+void UltrasoundModule<kSensorCount>::set_meta_data(sensor_msgs__msg__Range &message)
+{
+    message.radiation_type = sensor_msgs__msg__Range__ULTRASOUND;
+    message.field_of_view  = deg2rad(50);
+    message.min_range      = Ultrasound::kMinDistance_m;
+    message.max_range      = Ultrasound::kMaxDistance_m;
 }
 
 } // namespace pico
